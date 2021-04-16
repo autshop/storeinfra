@@ -34,17 +34,36 @@ baseUrl="https://$AWS_S3_BUCKET_NAME.s3.$region.amazonaws.com/"
 aws s3 mb "s3://$AWS_S3_BUCKET_NAME"
 
 ##Push VPC template to S3
-vpc_url="s3://$AWS_S3_BUCKET_NAME/infrastructure/vpc.yaml"
-aws s3 cp "./infrastructure/vpc.yaml" "$vpc_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "infrastructure/vpc.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+vpc_url="s3://$AWS_S3_BUCKET_NAME/templates/vpc.yaml"
+aws s3 cp "./templates/vpc.yaml" "$vpc_url"
+aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/vpc.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
 ##
-
 
 ##Push Security Group template to S3
-vpc_url="s3://$AWS_S3_BUCKET_NAME/infrastructure/security-groups.yaml"
-aws s3 cp "./infrastructure/security-groups.yaml" "$vpc_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "infrastructure/security-groups.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+security_groups_url="s3://$AWS_S3_BUCKET_NAME/templates/security-groups.yaml"
+aws s3 cp "./templates/security-groups.yaml" "$security_groups_url"
+aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/security-groups.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
 ##
+
+##Push Load Balancer template to S3
+load_balancer_core_url="s3://$AWS_S3_BUCKET_NAME/templates/load-balancer-core.yaml"
+aws s3 cp "./templates/load-balancer-core.yaml" "$load_balancer_core_url"
+aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/load-balancer-core.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+##
+
+##Push ECS template to S3
+ecs_cluster_core_url="s3://$AWS_S3_BUCKET_NAME/templates/ecs-cluster-core.yaml"
+aws s3 cp "./templates/ecs-cluster-core.yaml" "$ecs_cluster_core_url"
+aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/ecs-cluster-core.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+##
+
+##Push ECS Core Service template to S3
+ecs_service_core_url="s3://$AWS_S3_BUCKET_NAME/templates/ecs-service-core-api.yaml"
+aws s3 cp "./templates/ecs-service-core-api.yaml" "$ecs_service_core_url"
+aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/ecs-service-core-api.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+##
+
+
 
 
 
