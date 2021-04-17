@@ -1,5 +1,5 @@
 Description: >
-  ECS Cluster template for core services.
+  ECS Cluster template for store api services.
 
 Parameters:
   EnvironmentName:
@@ -14,7 +14,7 @@ Parameters:
   ClusterSize:
     Description: How many ECS hosts do you want to initially deploy?
     Type: Number
-    Default: 4
+    Default: 2
 
   VPC:
     Description: Choose which VPC this ECS cluster should be deployed to
@@ -37,7 +37,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Join [ "-", [ !Ref EnvironmentName, "cluster-core" ] ]
+      ClusterName: !Join [ "-", [ !Ref EnvironmentName, "cluster-store-api" ] ]
 
   ECSAutoScalingGroup:
     DependsOn: ECSCluster

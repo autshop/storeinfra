@@ -47,6 +47,7 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
+
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -59,6 +60,8 @@ Resources:
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
         Subnets: !GetAtt VPC.Outputs.PrivateSubnets
 
+
+
   CoreApiService:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -68,7 +71,7 @@ Resources:
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 2
         Listener: !GetAtt ALB.Outputs.Listener
-        Path: /api/*
+        Path: /api/
 
 
 Outputs:
