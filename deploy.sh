@@ -76,15 +76,6 @@ aws s3 cp "./templates/ecs-service-core-api.yaml" "$ecs_service_core_url"
 aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/ecs-service-core-api.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
 ##
 
-##Push ECS Store API Service template to S3
-ecs_service_store_api_url="s3://$AWS_S3_BUCKET_NAME/templates/ecs-service-store-api.yaml"
-aws s3 cp "./templates/ecs-service-store-api.yaml" "$ecs_service_store_api_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/ecs-service-store-api.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
-##
-
-
-
-
 
 
 #Push configs to S3 bucket END

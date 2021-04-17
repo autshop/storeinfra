@@ -37,7 +37,7 @@ Resources:
         EnvironmentName: !Ref AWS::StackName
         VPC: !GetAtt VPC.Outputs.VPC
 
-  ALB:
+  ALBCore:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/load-balancer-core.yaml
@@ -48,7 +48,7 @@ Resources:
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
 
-  ECS:
+  ECSCore:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-cluster-core.yaml
@@ -60,23 +60,20 @@ Resources:
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
         Subnets: !GetAtt VPC.Outputs.PrivateSubnets
 
-
-
-  CoreApiService:
+  ECSServiceCoreApi:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-service-core-api.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
+        Cluster: !GetAtt ECSCore.Outputs.Cluster
         DesiredCount: 2
-        Listener: !GetAtt ALB.Outputs.Listener
-        Path: /api/
-
+        Listener: !GetAtt ALBCore.Outputs.Listener
+        Path: /api/*
 
 Outputs:
   LoadBalancerUrl:
     Description: The URL endpoint for the load balancer
-    Value: !GetAtt ALB.Outputs.LoadBalancerUrl
+    Value: !GetAtt ALBCore.Outputs.LoadBalancerUrl
 
 
