@@ -1,0 +1,43 @@
+Description: >
+
+  Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
+
+  Template for Core components.
+
+Resources:
+  ALB:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/load-balancer-core.yaml
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        VPC: !GetAtt VPC.Outputs.VPC
+        Subnets: !GetAtt VPC.Outputs.PublicSubnets
+        SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
+
+
+  ECS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-cluster-core.yaml
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        InstanceType: t2.micro
+        ClusterSize: 4
+        VPC: !GetAtt VPC.Outputs.VPC
+        SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
+        Subnets: !GetAtt VPC.Outputs.PrivateSubnets
+
+  ECSServiceCoreApi:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-service-core-api.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        Cluster: !GetAtt ECS.Outputs.Cluster
+        DesiredCount: 2
+        Listener: !GetAtt ALB.Outputs.Listener
+        Path: /api/*
+
+
+

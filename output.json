@@ -1,0 +1,47 @@
+[
+    {
+        "OutputKey": "LoadBalancerSecurityGroup",
+        "OutputValue": "sg-05a6679b6429bc032",
+        "Description": "A reference to the security group for load balancers"
+    },
+    {
+        "OutputKey": "ECSHostSecurityGroup",
+        "OutputValue": "sg-0948a8c897bb3b6fd",
+        "Description": "A reference to the security group for ECS hosts"
+    },
+    {
+        "OutputKey": "PrivateSubnet1",
+        "OutputValue": "subnet-0b2553049e3d0b601",
+        "Description": "A reference to the private subnet in the 1st Availability Zone"
+    },
+    {
+        "OutputKey": "PrivateSubnet2",
+        "OutputValue": "subnet-0c5b3282f98261715",
+        "Description": "A reference to the private subnet in the 2nd Availability Zone"
+    },
+    {
+        "OutputKey": "PrivateSubnets",
+        "OutputValue": "subnet-0b2553049e3d0b601,subnet-0c5b3282f98261715",
+        "Description": "A list of the private subnets"
+    },
+    {
+        "OutputKey": "VPC",
+        "OutputValue": "vpc-03fea12a7107bfc41",
+        "Description": "A reference to the created VPC"
+    },
+    {
+        "OutputKey": "PublicSubnets",
+        "OutputValue": "subnet-0f6c40e4715a63999,subnet-0f0bf3106648b6bad",
+        "Description": "A list of the public subnets"
+    },
+    {
+        "OutputKey": "PublicSubnet2",
+        "OutputValue": "subnet-0f0bf3106648b6bad",
+        "Description": "A reference to the public subnet in the 2nd Availability Zone"
+    },
+    {
+        "OutputKey": "PublicSubnet1",
+        "OutputValue": "subnet-0f6c40e4715a63999",
+        "Description": "A reference to the public subnet in the 1st Availability Zone"
+    }
+]
