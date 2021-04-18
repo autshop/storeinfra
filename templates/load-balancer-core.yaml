@@ -7,12 +7,12 @@ Parameters:
     Type: String
 
   VPC:
-    Type: AWS::EC2::VPC::Id
     Description: Choose which VPC the Application Load Balancer should be deployed to
+    Type: String
 
   Subnets:
     Description: Choose which subnets the Application Load Balancer should be deployed to
-    Type: List<AWS::EC2::Subnet::Id>
+    Type: String
 
   SecurityGroup:
     Description: Select the Security Group to apply to the Application Load Balancer
@@ -23,7 +23,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Name: !Join [ "-", [ !Ref EnvironmentName, "load-balancer-core" ] ]
-      Subnets: !Ref Subnets
+      Subnets: !Split [ ",", !Ref Subnets ]
       SecurityGroups:
         - !Ref SecurityGroup
       Tags:
@@ -43,7 +43,6 @@ Resources:
   DefaultTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Sub ${EnvironmentName}-default
       VpcId: !Ref VPC
       Port: 80
       Protocol: HTTP

@@ -11,7 +11,6 @@ while getopts ":k:s:b:" opt; do
     ;;
     b) AWS_S3_BUCKET_NAME="$OPTARG"
     ;;
-    ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
   esac

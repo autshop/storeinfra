@@ -33,15 +33,21 @@ aws s3 cp "./templates/ecs-service-core-api.yaml" "$ecs_service_core_url"
 aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/ecs-service-core-api.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
 
 
-aws cloudformation describe-stacks --no-paginate --query "Stacks[].Outputs[]" --output json >> ./temp/1.json
+aws cloudformation describe-stacks --no-paginate --query "Stacks[].Outputs[]" --output json >> ./temp/outputs.json
 
-ko=$(jq '.[] | select(.OutputKey == "VPC").OutputValue' ./temp/1.json)
-echo $ko
+VPC=$(jq '.[] | select(.OutputKey == "VPC").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
+PublicSubnets=$(jq '.[] | select(.OutputKey == "PublicSubnets").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
+PrivateSubnets=$(jq '.[] | select(.OutputKey == "PrivateSubnets").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
+ECSHostSecurityGroup=$(jq '.[] | select(.OutputKey == "ECSHostSecurityGroup").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
+LoadBalancerSecurityGroup=$(jq '.[] | select(.OutputKey == "LoadBalancerSecurityGroup").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
 
-rm -rf ./temp/1.json
 
 
 aws cloudformation deploy \
     --template-file ./deployments/2-core.yaml \
-    --stack-name $CLOUDFORMATION_STACK_NAME \
+    --stack-name "$CLOUDFORMATION_STACK_NAME-core" \
+    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" \
     --capabilities CAPABILITY_NAMED_IAM
+
+
+rm -rf ./temp/outputs.json
