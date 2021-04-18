@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf ./temp/outputs.json
+
 while getopts ":k:s:b:c:" opt; do
   case $opt in
     k) AWS_ACCESS_KEY="$OPTARG"
@@ -49,5 +51,3 @@ aws cloudformation deploy \
     --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" \
     --capabilities CAPABILITY_NAMED_IAM
 
-
-rm -rf ./temp/outputs.json

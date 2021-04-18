@@ -19,10 +19,18 @@ Parameters:
     Description: The Application Load Balancer listener to register with
     Type: String
 
-  Path:
-    Description: The path to register with the Application Load Balancer
+  TenantId:
+    Description: Id of tenant.
+    Type: Number
+
+  TenantName:
+    Description: Slug name of tenant.
     Type: String
-    Default: /api/*
+
+  Priority:
+    Description: Priority of tenant.
+    Type: Number
+    Default: 1
 
 Resources:
   Service:
@@ -33,21 +41,21 @@ Resources:
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
-      ServiceName: !Join [ "-", [ !Ref Cluster, "storeapi-service-2" ] ]
+      ServiceName: !Join [ "-", [ !Ref Cluster, "store-api-service", !Ref TenantId ] ]
       LoadBalancers:
-        - ContainerName: "storeapi"
+        - ContainerName: "store-api"
           ContainerPort: 8080
           TargetGroupArn: !Ref TargetGroup
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: storeapi
+      Family: store-api
       ContainerDefinitions:
-        - Name: storeapi
+        - Name: store-api
           Essential: true
           Image: docker.io/akosfi/storeapi:latest
-          Memory: 128
+          Memory: 256
           PortMappings:
             - ContainerPort: 8080
           LogConfiguration:
@@ -80,11 +88,11 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       ListenerArn: !Ref Listener
-      Priority: 3
+      Priority: !Ref Priority
       Conditions:
-        - Field: path-pattern
+        - Field: host-header
           Values:
-            - !Ref Path
+            - !Sub api.${TenantName}.shop.akosfi.com
       Actions:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward

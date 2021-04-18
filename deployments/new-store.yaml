@@ -2,7 +2,7 @@ Description: >
 
   Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
 
-  Template for Store API components.
+  Template for new Store.
 
 Parameters:
   EnvironmentName:
@@ -52,9 +52,4 @@ Resources:
         SecurityGroup: !Ref ECSHostSecurityGroup
         Subnets: !Ref PrivateSubnets
 
-
-Outputs:
-  LoadBalancerUrlStoreApi:
-    Description: The URL endpoint for the store api load balancer
-    Value: !GetAtt ALB.Outputs.LoadBalancerUrl
 

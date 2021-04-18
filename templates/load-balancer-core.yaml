@@ -22,7 +22,7 @@ Resources:
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: !Join [ "-", [ !Ref EnvironmentName, "load-balancer-core" ] ]
+      Name: !Join [ "-", [ !Ref EnvironmentName, "alb" ] ]
       Subnets: !Split [ ",", !Ref Subnets ]
       SecurityGroups:
         - !Ref SecurityGroup
@@ -43,6 +43,7 @@ Resources:
   DefaultTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
+      Name: !Sub ${EnvironmentName}-default
       VpcId: !Ref VPC
       Port: 80
       Protocol: HTTP

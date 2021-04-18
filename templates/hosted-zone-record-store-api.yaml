@@ -1,0 +1,37 @@
+Description: >
+  ECS Store Api Service template for core services.
+
+Parameters:
+  HostedZoneId:
+    Description: Id of hosted zone.
+    Type: String
+
+  TenantId:
+    Description: Id of tenant.
+    Type: Number
+
+  TenantName:
+    Description: Slug name of tenant.
+    Type: String
+
+  Priority:
+    Description: Priority of tenant.
+    Type: Number
+    Default: 1
+
+  LoadBalancerDNS:
+    Description: DNS of Load Balancer where traffic will be routed.
+    Type: String
+
+Resources:
+  RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub api.${TenantName}.shop.akosfi.com
+      AliasTarget:
+        DNSName: !Ref LoadBalancerDNS
+        EvaluateTargetHealth: true
+        HostedZoneId: !Ref HostedZoneId
+      TTL: '900'
+      Type: A

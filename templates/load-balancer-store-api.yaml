@@ -19,31 +19,31 @@ Parameters:
     Type: AWS::EC2::SecurityGroup::Id
 
 Resources:
-  LoadBalancerStoreApi:
+  LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: !Join [ "-", [ !Ref EnvironmentName, "load-balancer-store-api" ] ]
-      Subnets: !Ref Subnets
+      Name: !Join [ "-", [ !Ref EnvironmentName, "alb" ] ]
+      Subnets: !Split [ ",", !Ref Subnets ]
       SecurityGroups:
         - !Ref SecurityGroup
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
 
-  LoadBalancerListenerStoreApi:
+  LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      LoadBalancerArn: !Ref LoadBalancerStoreApi
+      LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: HTTP
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref DefaultTargetGroupStoreApi
+          TargetGroupArn: !Ref DefaultTargetGroup
 
-  DefaultTargetGroupStoreApi:
+  DefaultTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: !Sub ${EnvironmentName}-store-api-default
+      Name: !Sub ${EnvironmentName}-default
       VpcId: !Ref VPC
       Port: 80
       Protocol: HTTP
@@ -51,12 +51,12 @@ Resources:
 Outputs:
   LoadBalancer:
     Description: A reference to the Application Load Balancer
-    Value: !Ref LoadBalancerStoreApi
+    Value: !Ref LoadBalancer
 
   LoadBalancerUrl:
     Description: The URL of the ALB
-    Value: !GetAtt LoadBalancerStoreApi.DNSName
+    Value: !GetAtt LoadBalancer.DNSName
 
   Listener:
     Description: A reference to a port 80 listener
-    Value: !Ref LoadBalancerListenerStoreApi
+    Value: !Ref LoadBalancerListener
