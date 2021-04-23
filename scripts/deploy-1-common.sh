@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 while getopts ":k:s:b:c:" opt; do
   case $opt in
     k) AWS_ACCESS_KEY="$OPTARG"
@@ -16,17 +17,11 @@ while getopts ":k:s:b:c:" opt; do
 done
 
 
-./scripts/_aws.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
+./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
+./scripts/helpers/s3_template_upload.sh -t "vpc.yaml"
 
-vpc_url="s3://$AWS_S3_BUCKET_NAME/templates/vpc.yaml"
-aws s3 cp "./templates/vpc.yaml" "$vpc_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/vpc.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
-
-
-security_groups_url="s3://$AWS_S3_BUCKET_NAME/templates/security-groups.yaml"
-aws s3 cp "./templates/security-groups.yaml" "$security_groups_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/security-groups.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+./scripts/helpers/s3_template_upload.sh -t "security-groups.yaml"
 
 
 aws cloudformation deploy \

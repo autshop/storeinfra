@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/helpers/cf_outputs_get.sh
+
 rm -rf ./temp/outputs.json
 
 while getopts ":k:s:b:c:" opt; do
@@ -17,27 +19,22 @@ while getopts ":k:s:b:c:" opt; do
   esac
 done
 
-TenantId=3
-TenantName="olcsobolt3"
+TenantId=4
+TenantName="olcsobolt4"
 
-./scripts/_aws.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
+./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
-ecs_service_store_api_url="s3://$AWS_S3_BUCKET_NAME/templates/ecs-service-store-api.yaml"
-aws s3 cp "./templates/ecs-service-store-api.yaml" "$ecs_service_store_api_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/ecs-service-store-api.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+./scripts/helpers/s3_template_upload.sh -t "ecs-service-store-api.yaml"
 
-hosted_zone_record_store_api_url="s3://$AWS_S3_BUCKET_NAME/templates/hosted-zone-record-store-api.yaml"
-aws s3 cp "./templates/hosted-zone-record-store-api.yaml" "$hosted_zone_record_store_api_url"
-aws s3api put-object-acl --bucket "$AWS_S3_BUCKET_NAME" --key "templates/hosted-zone-record-store-api.yaml" --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+./scripts/helpers/s3_template_upload.sh -t "hosted-zone-record-store-api.yaml"
 
+./scripts/helpers/cf_outputs_save.sh
 
-aws cloudformation describe-stacks --no-paginate --query "Stacks[].Outputs[]" --output json >> ./temp/outputs.json
-
-VPC=$(jq '.[] | select(.OutputKey == "VPC").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
-ALBListenerStoreAPI=$(jq '.[] | select(.OutputKey == "ALBListenerStoreAPI").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
-StoreAPICluster=$(jq '.[] | select(.OutputKey == "StoreAPICluster").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
-LoadBalancerUrlStoreAPI=$(jq '.[] | select(.OutputKey == "LoadBalancerUrlStoreAPI").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
-CanonicalHostedZoneIDStoreAPI=$(jq '.[] | select(.OutputKey == "CanonicalHostedZoneIDStoreAPI").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
+VPC=$(cf_outputs_get VPC)
+ALBListenerStoreAPI=$(cf_outputs_get ALBListenerStoreAPI)
+StoreAPICluster=$(cf_outputs_get StoreAPICluster)
+LoadBalancerUrlStoreAPI=$(cf_outputs_get LoadBalancerUrlStoreAPI)
+CanonicalHostedZoneIDStoreAPI=$(cf_outputs_get CanonicalHostedZoneIDStoreAPI)
 
 
 aws cloudformation deploy \
