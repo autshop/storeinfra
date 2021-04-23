@@ -33,6 +33,10 @@ Parameters:
     Description: DNS of load balancer.
     Type: String
 
+  CanonicalHostedZoneIDStoreAPI:
+    Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Type: String
+
   Priority:
     Description: Priority of tenant.
     Type: Number
@@ -60,3 +64,4 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         LoadBalancerDNS: !Ref LoadBalancerDNS
+        CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStoreAPI

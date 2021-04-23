@@ -17,8 +17,8 @@ while getopts ":k:s:b:c:" opt; do
   esac
 done
 
-TenantId=1
-TenantName="olcsobolt"
+TenantId=2
+TenantName="olcsobolt2"
 
 ./scripts/_aws.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
@@ -37,11 +37,12 @@ VPC=$(jq '.[] | select(.OutputKey == "VPC").OutputValue' ./temp/outputs.json | s
 ALBListenerStoreAPI=$(jq '.[] | select(.OutputKey == "ALBListenerStoreAPI").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
 StoreAPICluster=$(jq '.[] | select(.OutputKey == "StoreAPICluster").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
 LoadBalancerUrlStoreAPI=$(jq '.[] | select(.OutputKey == "LoadBalancerUrlStoreAPI").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
+CanonicalHostedZoneIDStoreAPI=$(jq '.[] | select(.OutputKey == "CanonicalHostedZoneIDStoreAPI").OutputValue' ./temp/outputs.json | sed -e 's/^"//' -e 's/"$//')
 
 
 aws cloudformation deploy \
     --template-file ./deployments/new-store.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME-store-$TenantId" \
-    --parameter-overrides VPC="$VPC" Cluster="$StoreAPICluster" Listener="$ALBListenerStoreAPI" TenantId="$TenantId" TenantName="$TenantName" HostedZoneId="Z07749613A5R8NMAOOIYD" LoadBalancerDNS="$LoadBalancerUrlStoreAPI" \
+    --parameter-overrides VPC="$VPC" Cluster="$StoreAPICluster" Listener="$ALBListenerStoreAPI" TenantId="$TenantId" TenantName="$TenantName" HostedZoneId="Z07749613A5R8NMAOOIYD" LoadBalancerDNS="$LoadBalancerUrlStoreAPI" CanonicalHostedZoneIDStoreAPI="$CanonicalHostedZoneIDStoreAPI"\
     --capabilities CAPABILITY_NAMED_IAM
 

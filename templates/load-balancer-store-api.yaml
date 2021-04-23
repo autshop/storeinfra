@@ -57,6 +57,11 @@ Outputs:
     Description: The URL of the ALB
     Value: !GetAtt LoadBalancer.DNSName
 
+  CanonicalHostedZoneIDStoreAPI:
+    Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Value: !GetAtt LoadBalancer.CanonicalHostedZoneID
+
+
   ALBListenerStoreAPI:
     Description: A reference to a port 80 listener
     Value: !Ref LoadBalancerListener

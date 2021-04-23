@@ -23,6 +23,11 @@ Parameters:
     Description: DNS of Load Balancer where traffic will be routed.
     Type: String
 
+
+  CanonicalHostedZoneIDStoreAPI:
+    Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Type: String
+
 Resources:
   RecordSet:
     Type: AWS::Route53::RecordSet
@@ -32,6 +37,5 @@ Resources:
       AliasTarget:
         DNSName: !Ref LoadBalancerDNS
         EvaluateTargetHealth: true
-        HostedZoneId: !Ref HostedZoneId
-      TTL: '900'
+        HostedZoneId: !Ref CanonicalHostedZoneIDStoreAPI
       Type: A

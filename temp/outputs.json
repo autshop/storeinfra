@@ -1,22 +1,42 @@
 [
     {
-        "OutputKey": "Listener",
-        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:listener/app/shop-core-alb/044b29912d800454/edfab6b0a0be4e43",
-        "Description": "A reference to a port 80 listener"
-    },
-    {
-        "OutputKey": "LoadBalancerUrl",
-        "OutputValue": "shop-core-alb-423628804.eu-west-3.elb.amazonaws.com",
+        "OutputKey": "LoadBalancerUrlStoreAPI",
+        "OutputValue": "shop-store-api-alb-601021349.eu-west-3.elb.amazonaws.com",
         "Description": "The URL of the ALB"
     },
     {
         "OutputKey": "LoadBalancer",
-        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:loadbalancer/app/shop-core-alb/044b29912d800454",
+        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:loadbalancer/app/shop-store-api-alb/345a0a15048d5cb1",
         "Description": "A reference to the Application Load Balancer"
     },
     {
+        "OutputKey": "CanonicalHostedZoneIDStoreAPI",
+        "OutputValue": "Z3Q77PNBQS71R4",
+        "Description": "The ID of the Amazon Route 53 hosted zone associated with the load balancer"
+    },
+    {
+        "OutputKey": "ALBListenerStoreAPI",
+        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:listener/app/shop-store-api-alb/345a0a15048d5cb1/96585199a60bafc3",
+        "Description": "A reference to a port 80 listener"
+    },
+    {
         "OutputKey": "ECSServiceAutoScalingRole",
-        "OutputValue": "arn:aws:iam::120646787562:role/shop-core-ECS-MKY05WGWLDR-ECSServiceAutoScalingRol-1LMQNL33LMDUG",
+        "OutputValue": "arn:aws:iam::120646787562:role/shop-store-api-ECS-10SD1U-ECSServiceAutoScalingRol-ZC433G3N9CDG",
+        "Description": "A reference to ECS service auto scaling role"
+    },
+    {
+        "OutputKey": "StoreAPICluster",
+        "OutputValue": "shop-store-api-cluster-store-api",
+        "Description": "A reference to the ECS cluster"
+    },
+    {
+        "OutputKey": "ECSAutoScalingGroupName",
+        "OutputValue": "shop-store-api-ECS-10SD1UU0FPB5A-ECSAutoScalingGroup-784Q9B2DO0CX",
+        "Description": "A reference to ECS AutoScaling Group Name"
+    },
+    {
+        "OutputKey": "ECSServiceAutoScalingRole",
+        "OutputValue": "arn:aws:iam::120646787562:role/shop-core-ECS-1MUB93YF9DR-ECSServiceAutoScalingRol-18WMO21QVT53B",
         "Description": "A reference to ECS service auto scaling role"
     },
     {
@@ -26,8 +46,23 @@
     },
     {
         "OutputKey": "ECSAutoScalingGroupName",
-        "OutputValue": "shop-core-ECS-MKY05WGWLDRE-ECSAutoScalingGroup-1GS0KB9SLV4ZJ",
+        "OutputValue": "shop-core-ECS-1MUB93YF9DRDB-ECSAutoScalingGroup-1BPG2TQXUTFC0",
         "Description": "A reference to ECS AutoScaling Group Name"
+    },
+    {
+        "OutputKey": "Listener",
+        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:listener/app/shop-core-alb/9e001710c6c0f532/8416bd9f317c0d1e",
+        "Description": "A reference to a port 80 listener"
+    },
+    {
+        "OutputKey": "LoadBalancerUrl",
+        "OutputValue": "shop-core-alb-1465827200.eu-west-3.elb.amazonaws.com",
+        "Description": "The URL of the ALB"
+    },
+    {
+        "OutputKey": "LoadBalancer",
+        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:loadbalancer/app/shop-core-alb/9e001710c6c0f532",
+        "Description": "A reference to the Application Load Balancer"
     },
     {
         "OutputKey": "LoadBalancerSecurityGroup",
