@@ -17,8 +17,8 @@ while getopts ":k:s:b:c:" opt; do
   esac
 done
 
-TenantId=2
-TenantName="olcsobolt2"
+TenantId=3
+TenantName="olcsobolt3"
 
 ./scripts/_aws.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 

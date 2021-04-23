@@ -1,9 +1,6 @@
 Description: >
-  Template for common components.
-
-  Based on:
   Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
-
+  Template for VPC and Security Groups.
 
 Resources:
   VPC:

@@ -43,7 +43,7 @@ Parameters:
     Default: 1
 
 Resources:
-  ECSService:
+  ECSServiceAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-service-store-api.yaml
