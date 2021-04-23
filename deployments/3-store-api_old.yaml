@@ -2,7 +2,7 @@ Description: >
 
   Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
 
-  Template for Store API load balancer and cluster.
+  Template for Store API components.
 
 Parameters:
   EnvironmentName:
@@ -33,7 +33,7 @@ Resources:
   ALB:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/load-balancer-store-api.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/load-balancer-store-api_old.yaml
       Parameters:
         EnvironmentName: !Ref EnvironmentName
         VPC: !Ref VPC
@@ -51,3 +51,10 @@ Resources:
         VPC: !Ref VPC
         SecurityGroup: !Ref ECSHostSecurityGroup
         Subnets: !Ref PrivateSubnets
+
+
+Outputs:
+  LoadBalancerUrlStoreApi:
+    Description: The URL endpoint for the store api load balancer
+    Value: !GetAtt ALB.Outputs.LoadBalancerUrl
+

@@ -1,5 +1,5 @@
 Description: >
-  LoadBalancer template for Store API.
+  LoadBalancer template for core services.
 
 Parameters:
   EnvironmentName:
@@ -53,10 +53,10 @@ Outputs:
     Description: A reference to the Application Load Balancer
     Value: !Ref LoadBalancer
 
-  LoadBalancerUrlStoreAPI:
+  LoadBalancerUrl:
     Description: The URL of the ALB
     Value: !GetAtt LoadBalancer.DNSName
 
-  ALBListenerStoreAPI:
+  Listener:
     Description: A reference to a port 80 listener
     Value: !Ref LoadBalancerListener

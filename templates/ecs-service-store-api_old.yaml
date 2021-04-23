@@ -54,7 +54,7 @@ Resources:
       ContainerDefinitions:
         - Name: store-api
           Essential: true
-          Image: docker.io/akosfi/store-api:latest
+          Image: docker.io/akosfi/storeapi:latest
           Memory: 256
           PortMappings:
             - ContainerPort: 8080

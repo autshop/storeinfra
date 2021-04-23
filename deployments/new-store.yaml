@@ -5,51 +5,58 @@ Description: >
   Template for new Store.
 
 Parameters:
-  EnvironmentName:
-    Description: An environment name that will be prefixed to resource names
-    Type: String
-
   VPC:
     Description: Choose which VPC the Application Load Balancer should be deployed to
     Type: String
 
-  PublicSubnets:
-    Description: Choose which subnets the Application Load Balancer should be deployed to
+  Cluster:
+    Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
-  PrivateSubnets:
-    Description: Choose which subnets this ECS cluster should be deployed to
+  Listener:
+    Description: The Application Load Balancer listener to register with
     Type: String
 
-  ECSHostSecurityGroup:
-    Description: Select the Security Group to use for the ECS cluster hosts
-    Type: AWS::EC2::SecurityGroup::Id
+  TenantId:
+    Description: Id of tenant.
+    Type: Number
 
-  LoadBalancerSecurityGroup:
-    Description: Select the Security Group to apply to the Application Load Balancer
-    Type: AWS::EC2::SecurityGroup::Id
+  TenantName:
+    Description: Slug name of tenant.
+    Type: String
+
+  HostedZoneId:
+    Description: ID of hosted zone.
+    Type: String
+
+  LoadBalancerDNS:
+    Description: DNS of load balancer.
+    Type: String
+
+  Priority:
+    Description: Priority of tenant.
+    Type: Number
+    Default: 1
 
 Resources:
-  ALB:
+  ECSService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/load-balancer-store-api.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-service-store-api.yaml
       Parameters:
-        EnvironmentName: !Ref EnvironmentName
         VPC: !Ref VPC
-        Subnets: !Ref PublicSubnets
-        SecurityGroup: !Ref LoadBalancerSecurityGroup
+        Cluster: !Ref Cluster
+        DesiredCount: 2
+        Listener: !Ref Listener
+        TenantId: !Ref TenantId
+        TenantName: !Ref TenantName
 
-  ECS:
+  RecordSet:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-cluster-store-api.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/hosted-zone-record-store-api.yaml
       Parameters:
-        EnvironmentName: !Ref AWS::StackName
-        InstanceType: t2.micro
-        ClusterSize: 4
-        VPC: !Ref VPC
-        SecurityGroup: !Ref ECSHostSecurityGroup
-        Subnets: !Ref PrivateSubnets
-
-
+        HostedZoneId: !Ref HostedZoneId
+        TenantId: !Ref TenantId
+        TenantName: !Ref TenantName
+        LoadBalancerDNS: !Ref LoadBalancerDNS

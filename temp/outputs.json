@@ -1,22 +1,22 @@
 [
     {
         "OutputKey": "Listener",
-        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:listener/app/shop-core-load-balancer-core/861b110730577b29/6037588a90c0be57",
+        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:listener/app/shop-core-alb/044b29912d800454/edfab6b0a0be4e43",
         "Description": "A reference to a port 80 listener"
     },
     {
         "OutputKey": "LoadBalancerUrl",
-        "OutputValue": "shop-core-load-balancer-core-137971128.eu-west-3.elb.amazonaws.com",
+        "OutputValue": "shop-core-alb-423628804.eu-west-3.elb.amazonaws.com",
         "Description": "The URL of the ALB"
     },
     {
         "OutputKey": "LoadBalancer",
-        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:loadbalancer/app/shop-core-load-balancer-core/861b110730577b29",
+        "OutputValue": "arn:aws:elasticloadbalancing:eu-west-3:120646787562:loadbalancer/app/shop-core-alb/044b29912d800454",
         "Description": "A reference to the Application Load Balancer"
     },
     {
         "OutputKey": "ECSServiceAutoScalingRole",
-        "OutputValue": "arn:aws:iam::120646787562:role/shop-core-ECS-12FT9IRXX83-ECSServiceAutoScalingRol-V8NY70DO6YHN",
+        "OutputValue": "arn:aws:iam::120646787562:role/shop-core-ECS-MKY05WGWLDR-ECSServiceAutoScalingRol-1LMQNL33LMDUG",
         "Description": "A reference to ECS service auto scaling role"
     },
     {
@@ -26,52 +26,52 @@
     },
     {
         "OutputKey": "ECSAutoScalingGroupName",
-        "OutputValue": "shop-core-ECS-12FT9IRXX83F5-ECSAutoScalingGroup-1UV1U1J30TWLZ",
+        "OutputValue": "shop-core-ECS-MKY05WGWLDRE-ECSAutoScalingGroup-1GS0KB9SLV4ZJ",
         "Description": "A reference to ECS AutoScaling Group Name"
     },
     {
         "OutputKey": "LoadBalancerSecurityGroup",
-        "OutputValue": "sg-0ddb377483fb70738",
+        "OutputValue": "sg-0c74dc1ab22ea029b",
         "Description": "A reference to the security group for load balancers"
     },
     {
         "OutputKey": "ECSHostSecurityGroup",
-        "OutputValue": "sg-033453cc0b2f1cf61",
+        "OutputValue": "sg-0b97533a8eae31150",
         "Description": "A reference to the security group for ECS hosts"
     },
     {
         "OutputKey": "PrivateSubnet1",
-        "OutputValue": "subnet-0cfa4a99b21e38b4a",
+        "OutputValue": "subnet-0c697a1a871c9a106",
         "Description": "A reference to the private subnet in the 1st Availability Zone"
     },
     {
         "OutputKey": "PrivateSubnet2",
-        "OutputValue": "subnet-04734d8a9139abc22",
+        "OutputValue": "subnet-066e18c67b0f962dd",
         "Description": "A reference to the private subnet in the 2nd Availability Zone"
     },
     {
         "OutputKey": "PrivateSubnets",
-        "OutputValue": "subnet-0cfa4a99b21e38b4a,subnet-04734d8a9139abc22",
+        "OutputValue": "subnet-0c697a1a871c9a106,subnet-066e18c67b0f962dd",
         "Description": "A list of the private subnets"
     },
     {
         "OutputKey": "VPC",
-        "OutputValue": "vpc-0ae64d8dfd08610f5",
+        "OutputValue": "vpc-00ddb05312716d127",
         "Description": "A reference to the created VPC"
     },
     {
         "OutputKey": "PublicSubnets",
-        "OutputValue": "subnet-0beda728dc8111d07,subnet-04c709fdaee04b64d",
+        "OutputValue": "subnet-0630618e96cfb0290,subnet-0e366a44e92d04fa2",
         "Description": "A list of the public subnets"
     },
     {
         "OutputKey": "PublicSubnet2",
-        "OutputValue": "subnet-04c709fdaee04b64d",
+        "OutputValue": "subnet-0e366a44e92d04fa2",
         "Description": "A reference to the public subnet in the 2nd Availability Zone"
     },
     {
         "OutputKey": "PublicSubnet1",
-        "OutputValue": "subnet-0beda728dc8111d07",
+        "OutputValue": "subnet-0630618e96cfb0290",
         "Description": "A reference to the public subnet in the 1st Availability Zone"
     }
 ]

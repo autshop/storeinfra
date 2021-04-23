@@ -43,7 +43,7 @@ Resources:
     DependsOn: ECSCluster
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      VPCZoneIdentifier: !Ref Subnets
+      VPCZoneIdentifier: !Split [ ",", !Ref Subnets ]
       LaunchConfigurationName: !Ref ECSLaunchConfiguration
       MinSize: !Ref ClusterSize
       MaxSize: !Ref ClusterSize
@@ -294,7 +294,7 @@ Resources:
         }
 
 Outputs:
-  Cluster:
+  StoreAPICluster:
     Description: A reference to the ECS cluster
     Value: !Ref ECSCluster
 
