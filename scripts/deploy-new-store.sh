@@ -20,7 +20,7 @@ while getopts ":k:s:b:c:" opt; do
 done
 
 TenantId=4
-TenantName="olcsobolt4"
+TenantName="olcsos"
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
