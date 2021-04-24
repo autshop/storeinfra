@@ -9,12 +9,12 @@ Parameters:
     Description: Choose which VPC the Application Load Balancer should be deployed to
     Type: String
 
-  Cluster:
+  ClusterStoreAPI:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
-  Listener:
-    Description: The Application Load Balancer listener to register with
+  ClusterStorefront:
+    Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
   TenantId:
@@ -29,12 +29,28 @@ Parameters:
     Description: ID of hosted zone.
     Type: String
 
-  LoadBalancerDNS:
+  LoadBalancerDNSStoreAPI:
     Description: DNS of load balancer.
     Type: String
 
   CanonicalHostedZoneIDStoreAPI:
     Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Type: String
+
+  LoadBalancerDNSStorefront:
+    Description: DNS of load balancer.
+    Type: String
+
+  CanonicalHostedZoneIDStorefront:
+    Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Type: String
+
+  ListenerStoreAPI:
+    Description: The Application Load Balancer listener to register with
+    Type: String
+
+  ListenerStorefront:
+    Description: The Application Load Balancer listener to register with
     Type: String
 
   Priority:
@@ -43,25 +59,49 @@ Parameters:
     Default: 1
 
 Resources:
-  ECSServiceAPI:
+  ECSServiceStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/ecs-service-store-api.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-store-api.yaml
       Parameters:
         VPC: !Ref VPC
-        Cluster: !Ref Cluster
+        Cluster: !Ref ClusterStoreAPI
         DesiredCount: 2
-        Listener: !Ref Listener
+        Listener: !Ref ListenerStoreAPI
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
 
-  RecordSet:
+  RecordSetStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/hosted-zone-record-store-api.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-store-api.yaml
       Parameters:
         HostedZoneId: !Ref HostedZoneId
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
-        LoadBalancerDNS: !Ref LoadBalancerDNS
+        LoadBalancerDNS: !Ref LoadBalancerDNSStoreAPI
         CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStoreAPI
+
+  ECSServiceStorefront:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-storefront.yaml
+      Parameters:
+        VPC: !Ref VPC
+        Cluster: !Ref ClusterStorefront
+        DesiredCount: 2
+        Listener: !Ref ListenerStorefront
+        TenantId: !Ref TenantId
+        TenantName: !Ref TenantName
+
+  RecordSetStorefront:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-storefront.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        TenantId: !Ref TenantId
+        TenantName: !Ref TenantName
+        LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
+        CanonicalHostedZoneIDStorefront: !Ref CanonicalHostedZoneIDStorefront
+

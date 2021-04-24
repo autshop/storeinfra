@@ -6,7 +6,7 @@ Resources:
   VPC:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/vpc.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/vpc/vpc.yaml
       Parameters:
         EnvironmentName: !Ref AWS::StackName
         VpcCIDR: 10.180.0.0/16
@@ -18,7 +18,7 @@ Resources:
   SecurityGroups:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/security-groups.yaml
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/security-group/security-groups.yaml
       Parameters:
         EnvironmentName: !Ref AWS::StackName
         VPC: !GetAtt VPC.Outputs.VPC
