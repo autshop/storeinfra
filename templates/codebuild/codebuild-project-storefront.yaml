@@ -1,0 +1,70 @@
+Description: >
+  Codebuild project template for Shop Storefront.
+
+Parameters:
+  DockerHubUsername:
+    Description: DockerHub username.
+    Type: String
+
+  DockerHubPassword:
+    Description: DockerHub password.
+    Type: String
+
+
+Resources:
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: codebuild-shop-storefront-service-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: shop-storefront
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0-21.04.23
+        PrivilegedMode: true
+        EnvironmentVariables:
+          - Name: DOCKERHUB_USERNAME
+            Value: !Ref DockerHubUsername
+          - Name: DOCKERHUB_PASSWORD
+            Value: !Ref DockerHubPassword
+          - Name: NEXT_SERVER_PORT
+            Value: 8080
+          - Name: NEXT_PUBLIC_TENANT_NAME
+            Value: default
+          - Name: NEXT_PUBLIC_SERVER_URL
+            Value: https://api.default.shop.akosfi.com
+          - Name: TENANT_ID
+            Value: 1
+      Source:
+        Type: GITHUB
+        Location: https://github.com/autshop/storefront.git
+        Auth:
+          Resource: NO_NEED_TO_SPECIFY_THIS_ACCORDING_TO_DOCS
+          Type: OAUTH
+      Triggers:
+        FilterGroups:
+          - - Pattern: PUSH
+              Type: EVENT
+        Webhook: true
+      Artifacts:
+        Type: NO_ARTIFACTS
+      TimeoutInMinutes: 10
+      LogsConfig:
+        CloudWatchLogs:
+          Status: DISABLED
+        S3Logs:
+          Status: DISABLED

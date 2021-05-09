@@ -1,6 +1,15 @@
 Description: >
   Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
-  Template for VPC and Security Groups.
+  Template for VPC, Security Groups and CodeBuild project.
+
+Parameters:
+  DockerHubUsername:
+    Description: DockerHub username.
+    Type: String
+
+  DockerHubPassword:
+    Description: DockerHub password.
+    Type: String
 
 Resources:
   VPC:
@@ -23,3 +32,10 @@ Resources:
         EnvironmentName: !Ref AWS::StackName
         VPC: !GetAtt VPC.Outputs.VPC
 
+  CodeBuild:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storefront.yaml
+      Parameters:
+        DockerHubUsername: !Ref DockerHubUsername
+        DockerHubPassword: !Ref DockerHubPassword
