@@ -4,23 +4,26 @@ source ./scripts/helpers/cf_outputs_get.sh
 
 rm -rf ./temp/outputs.json
 
-while getopts ":k:s:b:c:" opt; do
+while getopts ":k:s:i:n:p:" opt; do
   case $opt in
     k) AWS_ACCESS_KEY="$OPTARG"
     ;;
     s) AWS_ACCESS_SECRET="$OPTARG"
     ;;
-    b) AWS_S3_BUCKET_NAME="$OPTARG"
+    i) TENANT_ID="$OPTARG"
     ;;
-    c) CLOUDFORMATION_STACK_NAME="$OPTARG"
+    n) TENANT_NAME="$OPTARG"
+    ;;
+    p) PRIORITY=$OPTARG
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
   esac
 done
 
-TenantId=2
-TenantName="testbolt"
+AWS_S3_BUCKET_NAME="autstorebucket"
+CLOUDFORMATION_STACK_NAME="shop"
+
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
@@ -44,12 +47,11 @@ StorefrontCluster=$(cf_outputs_get StorefrontCluster)
 LoadBalancerUrlStorefront=$(cf_outputs_get LoadBalancerUrlStorefront)
 CanonicalHostedZoneIDStorefront=$(cf_outputs_get CanonicalHostedZoneIDStorefront)
 
-
-./scripts/helpers/codebuild.sh -i "$TenantId" -n "$TenantName"
+./scripts/helpers/codebuild.sh -i "$TENANT_ID" -n "$TENANT_NAME"
 
 aws cloudformation deploy \
     --template-file ./deployments/new-store.yaml \
-    --stack-name "$CLOUDFORMATION_STACK_NAME-store-$TenantId" \
-    --parameter-overrides VPC="$VPC" ClusterStoreAPI="$StoreAPICluster" ClusterStorefront="$StorefrontCluster" TenantId="$TenantId" TenantName="$TenantName" HostedZoneId="Z07749613A5R8NMAOOIYD" LoadBalancerDNSStoreAPI="$LoadBalancerUrlStoreAPI" LoadBalancerDNSStorefront="$LoadBalancerUrlStorefront" CanonicalHostedZoneIDStoreAPI="$CanonicalHostedZoneIDStoreAPI" CanonicalHostedZoneIDStorefront="$CanonicalHostedZoneIDStorefront" ListenerStoreAPI="$ALBListenerStoreAPI" ListenerStorefront="$ALBListenerStorefront"\
+    --stack-name "$CLOUDFORMATION_STACK_NAME-store-$TENANT_ID" \
+    --parameter-overrides VPC="$VPC" ClusterStoreAPI="$StoreAPICluster" ClusterStorefront="$StorefrontCluster" TenantId=$(expr $TENANT_ID + 0) TenantName="$TENANT_NAME" HostedZoneId="Z07749613A5R8NMAOOIYD" LoadBalancerDNSStoreAPI="$LoadBalancerUrlStoreAPI" LoadBalancerDNSStorefront="$LoadBalancerUrlStorefront" CanonicalHostedZoneIDStoreAPI="$CanonicalHostedZoneIDStoreAPI" CanonicalHostedZoneIDStorefront="$CanonicalHostedZoneIDStorefront" ListenerStoreAPI="$ALBListenerStoreAPI" ListenerStorefront="$ALBListenerStorefront" Priority=$(expr $PRIORITY + 0)\
     --capabilities CAPABILITY_NAMED_IAM
 
