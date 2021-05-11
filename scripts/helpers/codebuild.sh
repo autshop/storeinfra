@@ -18,7 +18,7 @@ JSON_STRING=$( jq -n \
                   --arg tid "$TENANT_ID" \
                   --arg tn "$TENANT_NAME" \
                   --arg s "http://api.$TENANT_NAME.shop.akosfi.com" \
-                  '[{name: "TENANT_ID", value: $tid}, { name: "TENANT_NAME", value: $tn},{name: "NEXT_PUBLIC_SERVER_URL",value: $s }]' )
+                  '[{name: "TENANT_ID", value: $tid}, { name: "NEXT_PUBLIC_TENANT_NAME", value: $tn},{name: "NEXT_PUBLIC_SERVER_URL",value: $s }]' )
 
 echo $JSON_STRING
 
