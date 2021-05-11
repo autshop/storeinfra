@@ -1,8 +1,28 @@
 #!/bin/bash
 
+while getopts ":i:n:" opt; do
+  case $opt in
+    i) TENANT_ID="$OPTARG"
+    ;;
+    n) TENANT_NAME="$OPTARG"
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+
+
 echo "Started building storefront image."
 
-CODEBUILD_RESPONSE=$(aws codebuild start-build --project-name shop-storefront --environment-variables-override '[{"name":"TENANT_ID","value":"2"},{"name":"NEXT_PUBLIC_TENANT_NAME","value":"olcsos"},{"name":"NEXT_PUBLIC_SERVER_URL","value":"https://api.olcsos.shop.akosfi.com"}]')
+JSON_STRING=$( jq -n \
+                  --arg tid "$TENANT_ID" \
+                  --arg tn "$TENANT_NAME" \
+                  --arg s "http://api.$TENANT_NAME.shop.akosfi.com" \
+                  '[{name: "TENANT_ID", value: $tid}, { name: "TENANT_NAME", value: $tn},{name: "NEXT_PUBLIC_SERVER_URL",value: $s }]' )
+
+echo $JSON_STRING
+
+CODEBUILD_RESPONSE=$(aws codebuild start-build --project-name shop-storefront --environment-variables-override "$JSON_STRING")
 CODEBUILD_BUILD_ID=$(echo $CODEBUILD_RESPONSE | jq '.build.id' | sed -e 's/^"//' -e 's/"$//')
 
 echo "CodeBuild build ID: $CODEBUILD_BUILD_ID"

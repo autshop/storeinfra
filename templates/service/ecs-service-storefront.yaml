@@ -30,7 +30,7 @@ Parameters:
   Priority:
     Description: Priority of tenant.
     Type: Number
-    Default: 1
+    Default: 10
 
 Resources:
   Service:
@@ -54,7 +54,7 @@ Resources:
       ContainerDefinitions:
         - Name: storefront
           Essential: true
-          Image: docker.io/akosfi/storefront:latest
+          Image: !Join [ "", [ "docker.io/akosfi/storefront:", !Ref TenantId ] ]
           Memory: 256
           PortMappings:
             - ContainerPort: 8080

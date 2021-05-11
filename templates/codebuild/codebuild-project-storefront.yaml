@@ -46,7 +46,7 @@ Resources:
           - Name: NEXT_PUBLIC_TENANT_NAME
             Value: default
           - Name: NEXT_PUBLIC_SERVER_URL
-            Value: https://api.default.shop.akosfi.com
+            Value: http://api.default.shop.akosfi.com
           - Name: TENANT_ID
             Value: 1
       Source:

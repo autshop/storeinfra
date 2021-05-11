@@ -19,8 +19,8 @@ while getopts ":k:s:b:c:" opt; do
   esac
 done
 
-TenantId=4
-TenantName="olcsos"
+TenantId=5
+TenantName="fiakosboltja"
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
@@ -44,6 +44,8 @@ StorefrontCluster=$(cf_outputs_get StorefrontCluster)
 LoadBalancerUrlStorefront=$(cf_outputs_get LoadBalancerUrlStorefront)
 CanonicalHostedZoneIDStorefront=$(cf_outputs_get CanonicalHostedZoneIDStorefront)
 
+
+./scripts/helpers/codebuild.sh -i "$TenantId" -n "$TenantName"
 
 aws cloudformation deploy \
     --template-file ./deployments/new-store.yaml \

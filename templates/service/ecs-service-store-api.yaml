@@ -30,7 +30,7 @@ Parameters:
   Priority:
     Description: Priority of tenant.
     Type: Number
-    Default: 1
+    Default: 10
 
 Resources:
   Service:
