@@ -19,8 +19,8 @@ while getopts ":k:s:b:c:" opt; do
   esac
 done
 
-TenantId=5
-TenantName="fiakosboltja"
+TenantId=2
+TenantName="testbolt"
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
