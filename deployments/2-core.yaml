@@ -32,7 +32,7 @@ Resources:
   ALB:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/load-balancer/load-balancer-core.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/load-balancer/load-balancer-core.yaml
       Parameters:
         EnvironmentName: !Ref EnvironmentName
         VPC: !Ref VPC
@@ -42,7 +42,7 @@ Resources:
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/cluster/ecs-cluster-core.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/cluster/ecs-cluster-core.yaml
       Parameters:
         EnvironmentName: !Ref AWS::StackName
         InstanceType: t2.micro
@@ -54,7 +54,7 @@ Resources:
   ECSServiceCoreApi:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-core-api.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-core-api.yaml
       Parameters:
         VPC: !Ref VPC
         Cluster: !GetAtt ECS.Outputs.Cluster

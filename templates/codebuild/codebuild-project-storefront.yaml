@@ -10,6 +10,10 @@ Parameters:
     Description: DockerHub password.
     Type: String
 
+  GithubAccessToken:
+    Description: Github Personal Access Token.
+    Type: String
+
 
 Resources:
   CodeBuildServiceRole:
@@ -25,6 +29,13 @@ Resources:
             Principal:
               Service:
                 - codebuild.amazonaws.com
+
+  CodeBuildSourceCredential:
+    Type: AWS::CodeBuild::SourceCredential
+    Properties:
+      AuthType: PERSONAL_ACCESS_TOKEN
+      ServerType: GITHUB
+      Token: !Ref GithubAccessToken
 
   CodeBuildProject:
     Type: AWS::CodeBuild::Project

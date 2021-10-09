@@ -9,7 +9,7 @@ while getopts ":t:" opt; do
   esac
 done
 
-AWS_S3_BUCKET_NAME="autstorebucket"
+AWS_S3_BUCKET_NAME="autshop"
 
 template_path="s3://$AWS_S3_BUCKET_NAME/templates/$TEMPLATE"
 aws s3 cp "./templates/$TEMPLATE" "$template_path"

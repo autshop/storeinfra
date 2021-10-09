@@ -4,19 +4,28 @@ source ./scripts/helpers/cf_outputs_get.sh
 
 rm -rf ./temp/outputs.json
 
-while getopts ":k:s:b:c:" opt; do
-  case $opt in
-    k) AWS_ACCESS_KEY="$OPTARG"
-    ;;
-    s) AWS_ACCESS_SECRET="$OPTARG"
-    ;;
-    b) AWS_S3_BUCKET_NAME="$OPTARG"
-    ;;
-    c) CLOUDFORMATION_STACK_NAME="$OPTARG"
-    ;;
-    \?) echo "Invalid option -$OPTARG" >&2
-    ;;
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --k=*)
+      AWS_ACCESS_KEY="${1#*=}"
+      ;;
+    --s=*)
+      AWS_ACCESS_SECRET="${1#*=}"
+      ;;
+    --b=*)
+      AWS_S3_BUCKET_NAME="${1#*=}"
+      ;;
+    --c=*)
+      CLOUDFORMATION_STACK_NAME="${1#*=}"
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument.*\n"
+      printf "***************************\n"
+      exit 1
   esac
+  shift
 done
 
 

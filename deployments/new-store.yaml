@@ -62,7 +62,7 @@ Resources:
   ECSServiceStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-store-api.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-store-api.yaml
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref ClusterStoreAPI
@@ -75,7 +75,7 @@ Resources:
   RecordSetStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-store-api.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-store-api.yaml
       Parameters:
         HostedZoneId: !Ref HostedZoneId
         TenantId: !Ref TenantId
@@ -86,7 +86,7 @@ Resources:
   ECSServiceStorefront:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-storefront.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-storefront.yaml
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref ClusterStorefront
@@ -99,7 +99,7 @@ Resources:
   RecordSetStorefront:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-storefront.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-storefront.yaml
       Parameters:
         HostedZoneId: !Ref HostedZoneId
         TenantId: !Ref TenantId

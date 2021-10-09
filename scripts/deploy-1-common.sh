@@ -1,25 +1,36 @@
 #!/bin/bash
 
-
-while getopts ":k:s:b:c:u:p:" opt; do
-  case $opt in
-    k) AWS_ACCESS_KEY="$OPTARG"
-    ;;
-    s) AWS_ACCESS_SECRET="$OPTARG"
-    ;;
-    b) AWS_S3_BUCKET_NAME="$OPTARG"
-    ;;
-    c) CLOUDFORMATION_STACK_NAME="$OPTARG"
-    ;;
-    u) DOCKERHUB_USERNAME="$OPTARG"
-    ;;
-    p) DOCKERHUB_PASSWORD="$OPTARG"
-    ;;
-    \?) echo "Invalid option -$OPTARG" >&2
-    ;;
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --k=*)
+      AWS_ACCESS_KEY="${1#*=}"
+      ;;
+    --s=*)
+      AWS_ACCESS_SECRET="${1#*=}"
+      ;;
+    --b=*)
+      AWS_S3_BUCKET_NAME="${1#*=}"
+      ;;
+    --c=*)
+      CLOUDFORMATION_STACK_NAME="${1#*=}"
+      ;;
+    --u=*)
+      DOCKERHUB_USERNAME="${1#*=}"
+      ;;
+    --p=*)
+      DOCKERHUB_PASSWORD="${1#*=}"
+      ;;
+     --t=*)
+      GITHUB_ACCESS_TOKEN="${1#*=}"
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument.*\n"
+      printf "***************************\n"
+      exit 1
   esac
+  shift
 done
-
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
@@ -32,5 +43,5 @@ done
 aws cloudformation deploy \
     --template-file ./deployments/1-common.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME" \
-    --parameter-overrides DockerHubUsername="$DOCKERHUB_USERNAME" DockerHubPassword="$DOCKERHUB_PASSWORD" \
+    --parameter-overrides DockerHubUsername="$DOCKERHUB_USERNAME" DockerHubPassword="$DOCKERHUB_PASSWORD" GithubAccessToken="$GITHUB_ACCESS_TOKEN" \
     --capabilities CAPABILITY_NAMED_IAM

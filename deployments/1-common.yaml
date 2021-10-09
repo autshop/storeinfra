@@ -11,11 +11,15 @@ Parameters:
     Description: DockerHub password.
     Type: String
 
+  GithubAccessToken:
+    Description: Github Personal Access Token.
+    Type: String
+
 Resources:
   VPC:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/vpc/vpc.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/vpc/vpc.yaml
       Parameters:
         EnvironmentName: !Ref AWS::StackName
         VpcCIDR: 10.180.0.0/16
@@ -27,7 +31,7 @@ Resources:
   SecurityGroups:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/security-group/security-groups.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/security-group/security-groups.yaml
       Parameters:
         EnvironmentName: !Ref AWS::StackName
         VPC: !GetAtt VPC.Outputs.VPC
@@ -35,7 +39,8 @@ Resources:
   CodeBuild:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autstorebucket.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storefront.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storefront.yaml
       Parameters:
         DockerHubUsername: !Ref DockerHubUsername
         DockerHubPassword: !Ref DockerHubPassword
+        GithubAccessToken: !Ref GithubAccessToken
