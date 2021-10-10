@@ -59,6 +59,20 @@ Parameters:
     Default: 1
 
 Resources:
+  SecretsStoreAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store-api.yaml
+      Parameters:
+        TenantId: !Ref TenantId
+
+  ECSTaskExecutionRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/iam/ecs-task-execution-role.yaml
+      Parameters:
+        TenantId: !Ref TenantId
+
   ECSServiceStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -82,28 +96,4 @@ Resources:
         TenantName: !Ref TenantName
         LoadBalancerDNS: !Ref LoadBalancerDNSStoreAPI
         CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStoreAPI
-
-  ECSServiceStorefront:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-storefront.yaml
-      Parameters:
-        VPC: !Ref VPC
-        Cluster: !Ref ClusterStorefront
-        DesiredCount: 2
-        Listener: !Ref ListenerStorefront
-        TenantId: !Ref TenantId
-        TenantName: !Ref TenantName
-        Priority: !Ref Priority
-
-  RecordSetStorefront:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-storefront.yaml
-      Parameters:
-        HostedZoneId: !Ref HostedZoneId
-        TenantId: !Ref TenantId
-        TenantName: !Ref TenantName
-        LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
-        CanonicalHostedZoneIDStorefront: !Ref CanonicalHostedZoneIDStorefront
 

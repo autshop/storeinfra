@@ -38,6 +38,10 @@ CLOUDFORMATION_STACK_NAME="shop"
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
+./scripts/helpers/s3_template_upload.sh -t "iam/ecs-task-execution-role.yaml"
+
+./scripts/helpers/s3_template_upload.sh -t "secrets-manager/secrets-store-api.yaml"
+
 ./scripts/helpers/s3_template_upload.sh -t "service/ecs-service-store-api.yaml"
 
 ./scripts/helpers/s3_template_upload.sh -t "hosted-zone/hosted-zone-record-store-api.yaml"
@@ -58,13 +62,13 @@ StorefrontCluster=$(cf_outputs_get StorefrontCluster)
 LoadBalancerUrlStorefront=$(cf_outputs_get LoadBalancerUrlStorefront)
 CanonicalHostedZoneIDStorefront=$(cf_outputs_get CanonicalHostedZoneIDStorefront)
 
-./scripts/helpers/codebuild.sh -i "$TENANT_ID" -n "$TENANT_NAME"
+#./scripts/helpers/codebuild.sh -i "$TENANT_ID" -n "$TENANT_NAME"
 
 
 #TODO HOSTED ZONE ID BELOW
 aws cloudformation deploy \
     --template-file ./deployments/new-store.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME-store-$TENANT_ID" \
-    --parameter-overrides VPC="$VPC" ClusterStoreAPI="$StoreAPICluster" ClusterStorefront="$StorefrontCluster" TenantId=$(expr $TENANT_ID + 0) TenantName="$TENANT_NAME" HostedZoneId="Z039440539RO5LOP54PP9" LoadBalancerDNSStoreAPI="$LoadBalancerUrlStoreAPI" LoadBalancerDNSStorefront="$LoadBalancerUrlStorefront" CanonicalHostedZoneIDStoreAPI="$CanonicalHostedZoneIDStoreAPI" CanonicalHostedZoneIDStorefront="$CanonicalHostedZoneIDStorefront" ListenerStoreAPI="$ALBListenerStoreAPI" ListenerStorefront="$ALBListenerStorefront" Priority=$(expr $PRIORITY + 0)\
+    --parameter-overrides VPC="$VPC" ClusterStoreAPI="$StoreAPICluster" ClusterStorefront="$StorefrontCluster" TenantId=$(expr $TENANT_ID + 0) TenantName="$TENANT_NAME" HostedZoneId="Z0334966BUBL2CGRBGQ2" LoadBalancerDNSStoreAPI="$LoadBalancerUrlStoreAPI" LoadBalancerDNSStorefront="$LoadBalancerUrlStorefront" CanonicalHostedZoneIDStoreAPI="$CanonicalHostedZoneIDStoreAPI" CanonicalHostedZoneIDStorefront="$CanonicalHostedZoneIDStorefront" ListenerStoreAPI="$ALBListenerStoreAPI" ListenerStorefront="$ALBListenerStorefront" Priority=$(expr $PRIORITY + 0)\
     --capabilities CAPABILITY_NAMED_IAM
 

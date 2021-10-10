@@ -51,6 +51,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: store-api
+      ExecutionRoleArn: "arn:aws:iam::678325551867:role/ecsTaskExecutionRole"
       ContainerDefinitions:
         - Name: store-api
           Essential: true
@@ -63,6 +64,9 @@ Resources:
             Options:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
+          Secrets:
+            - Name: TESTKEY
+              ValueFrom: "arn:aws:secretsmanager:eu-west-3:678325551867:secret:test-DTivcm:testkey::"
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
