@@ -32,6 +32,14 @@ Parameters:
     Type: Number
     Default: 1
 
+  SecretArn:
+    Description: Arn of secret.
+    Type: String
+
+  ExecutionRoleArn:
+    Description: Arn of role.
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -51,7 +59,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: store-api
-      ExecutionRoleArn: "arn:aws:iam::678325551867:role/ecsTaskExecutionRole"
+      ExecutionRoleArn: !Ref ExecutionRoleArn
       ContainerDefinitions:
         - Name: store-api
           Essential: true
@@ -65,8 +73,8 @@ Resources:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
           Secrets:
-            - Name: TESTKEY
-              ValueFrom: "arn:aws:secretsmanager:eu-west-3:678325551867:secret:test-DTivcm:testkey::"
+            - Name: DB_USERNAME2
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_USERNAME2::"]]
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup

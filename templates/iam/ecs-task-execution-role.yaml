@@ -5,6 +5,9 @@ Parameters:
   TenantId:
     Description: Id of tenant.
     Type: Number
+  SecretArn:
+    Description: Arn of secret.
+    Type: String
 
 Resources:
   Role:
@@ -31,4 +34,8 @@ Resources:
               - Effect: Allow
                 Action:
                   - secretsmanager:GetSecretValue
-                Resource: '*'
+                Resource: !Ref SecretArn
+
+Outputs:
+  RoleArn:
+    Value: !GetAtt Role.Arn

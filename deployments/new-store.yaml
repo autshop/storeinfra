@@ -72,6 +72,10 @@ Resources:
       TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/iam/ecs-task-execution-role.yaml
       Parameters:
         TenantId: !Ref TenantId
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
 
   ECSServiceStoreAPI:
     Type: AWS::CloudFormation::Stack
@@ -85,6 +89,14 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         Priority: !Ref Priority
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
+        ExecutionRoleArn:
+          Fn::GetAtt:
+            - ECSTaskExecutionRole
+            - Outputs.RoleArn
 
   RecordSetStoreAPI:
     Type: AWS::CloudFormation::Stack
