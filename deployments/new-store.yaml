@@ -58,27 +58,27 @@ Parameters:
     Type: Number
     Default: 1
 
-  ENV_DB_USERNAME:
+  EnvDbUsername:
     Description: DB Username Enviroment Variable.
     Type: String
     Default: "TODO remove!"
 
-  ENV_DB_PASSWORD:
+  EnvDbPassword:
     Description: DB Password Enviroment Variable.
     Type: String
     Default: "TODO remove!"
 
-  ENV_DB_SERVER:
+  EnvDbServer:
     Description: DB Server Enviroment Variable.
     Type: String
     Default: "TODO remove!"
 
-  ENV_DB_NAME:
+  EnvDbName:
     Description: DB Name Enviroment Variable.
     Type: String
     Default: "TODO remove!"
 
-  ENV_DB_PORT:
+  EnvDbPort:
     Description: DB Port Enviroment Variable.
     Type: String
     Default: "TODO remove!"
@@ -90,6 +90,11 @@ Resources:
       TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store-api.yaml
       Parameters:
         TenantId: !Ref TenantId
+        EnvDbUsername: !Ref EnvDbUsername
+        EnvDbPassword: !Ref EnvDbPassword
+        EnvDbServer: !Ref EnvDbName
+        EnvDbName: !Ref EnvDbName
+        EnvDbPort: !Ref EnvDbPort
 
   ECSTaskExecutionRole:
     Type: AWS::CloudFormation::Stack
@@ -122,11 +127,6 @@ Resources:
           Fn::GetAtt:
             - ECSTaskExecutionRole
             - Outputs.RoleArn
-        ENV_DB_USERNAME: !Ref ENV_DB_USERNAME
-        ENV_DB_PASSWORD: !Ref ENV_DB_PASSWORD
-        ENV_DB_SERVER: !Ref ENV_DB_NAME
-        ENV_DB_NAME: !Ref ENV_DB_NAME
-        ENV_DB_PORT: !Ref ENV_DB_PORT
 
   RecordSetStoreAPI:
     Type: AWS::CloudFormation::Stack
