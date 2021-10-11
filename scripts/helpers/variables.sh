@@ -1,0 +1,4 @@
+#!/bin/bash
+
+CLOUDFORMATION_STACK_NAME="shop"
+AWS_S3_BUCKET_NAME="autshop"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/helpers/variables.sh
+
 while [ $# -gt 0 ]; do
   case "$1" in
     --k=*)
@@ -7,12 +9,6 @@ while [ $# -gt 0 ]; do
       ;;
     --s=*)
       AWS_ACCESS_SECRET="${1#*=}"
-      ;;
-    --b=*)
-      AWS_S3_BUCKET_NAME="${1#*=}"
-      ;;
-    --c=*)
-      CLOUDFORMATION_STACK_NAME="${1#*=}"
       ;;
     --u=*)
       DOCKERHUB_USERNAME="${1#*=}"
@@ -35,9 +31,7 @@ done
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
 ./scripts/helpers/s3_template_upload.sh -t "templates/vpc/vpc.yaml"
-
 ./scripts/helpers/s3_template_upload.sh -t "templates/security-group/security-groups.yaml"
-
 ./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storefront.yaml"
 
 aws cloudformation deploy \

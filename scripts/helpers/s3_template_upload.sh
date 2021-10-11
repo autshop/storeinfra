@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/helpers/variables.sh
+
 while getopts ":t:" opt; do
   case $opt in
     t) TEMPLATE="$OPTARG"
@@ -8,8 +10,6 @@ while getopts ":t:" opt; do
     ;;
   esac
 done
-
-AWS_S3_BUCKET_NAME="autshop"
 
 template_path="s3://$AWS_S3_BUCKET_NAME/$TEMPLATE"
 aws s3 cp "./$TEMPLATE" "$template_path"
