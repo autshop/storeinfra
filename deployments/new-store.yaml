@@ -58,6 +58,31 @@ Parameters:
     Type: Number
     Default: 1
 
+  ENV_DB_USERNAME:
+    Description: DB Username Enviroment Variable.
+    Type: String
+    Default: "TODO remove!"
+
+  ENV_DB_PASSWORD:
+    Description: DB Password Enviroment Variable.
+    Type: String
+    Default: "TODO remove!"
+
+  ENV_DB_SERVER:
+    Description: DB Server Enviroment Variable.
+    Type: String
+    Default: "TODO remove!"
+
+  ENV_DB_NAME:
+    Description: DB Name Enviroment Variable.
+    Type: String
+    Default: "TODO remove!"
+
+  ENV_DB_PORT:
+    Description: DB Port Enviroment Variable.
+    Type: String
+    Default: "TODO remove!"
+
 Resources:
   SecretsStoreAPI:
     Type: AWS::CloudFormation::Stack
@@ -97,6 +122,11 @@ Resources:
           Fn::GetAtt:
             - ECSTaskExecutionRole
             - Outputs.RoleArn
+        ENV_DB_USERNAME: !Ref ENV_DB_USERNAME
+        ENV_DB_PASSWORD: !Ref ENV_DB_PASSWORD
+        ENV_DB_SERVER: !Ref ENV_DB_NAME
+        ENV_DB_NAME: !Ref ENV_DB_NAME
+        ENV_DB_PORT: !Ref ENV_DB_PORT
 
   RecordSetStoreAPI:
     Type: AWS::CloudFormation::Stack
