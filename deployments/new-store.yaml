@@ -92,7 +92,7 @@ Resources:
         TenantId: !Ref TenantId
         EnvDbUsername: !Ref EnvDbUsername
         EnvDbPassword: !Ref EnvDbPassword
-        EnvDbServer: !Ref EnvDbName
+        EnvDbServer: !Ref EnvDbServer
         EnvDbName: !Ref EnvDbName
         EnvDbPort: !Ref EnvDbPort
 
