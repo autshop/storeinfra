@@ -32,6 +32,14 @@ Parameters:
     Type: Number
     Default: 1
 
+  SecretArn:
+    Description: Arn of secret.
+    Type: String
+
+  ExecutionRoleArn:
+    Description: Arn of role.
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -51,6 +59,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: store-api
+      ExecutionRoleArn: !Ref ExecutionRoleArn
       ContainerDefinitions:
         - Name: store-api
           Essential: true
@@ -63,6 +72,17 @@ Resources:
             Options:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
+          Secrets:
+            - Name: DB_USERNAME
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_USERNAME::"]]
+            - Name: DB_PASSWORD
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_PASSWORD::"]]
+            - Name: DB_SERVER
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_SERVER::"]]
+            - Name: DB_NAME
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_NAME::"]]
+            - Name: DB_PORT
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_PORT::"]]
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup

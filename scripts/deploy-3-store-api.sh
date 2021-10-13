@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ./scripts/helpers/variables.sh
 source ./scripts/helpers/cf_outputs_get.sh
 
 ./scripts/helpers/cf_outputs_clear.sh
@@ -12,12 +13,6 @@ while [ $# -gt 0 ]; do
     --s=*)
       AWS_ACCESS_SECRET="${1#*=}"
       ;;
-    --b=*)
-      AWS_S3_BUCKET_NAME="${1#*=}"
-      ;;
-    --c=*)
-      CLOUDFORMATION_STACK_NAME="${1#*=}"
-      ;;
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument.*\n"
@@ -29,9 +24,8 @@ done
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
-./scripts/helpers/s3_template_upload.sh -t "load-balancer/load-balancer-store-api.yaml"
-
-./scripts/helpers/s3_template_upload.sh -t "cluster/ecs-cluster-store-api.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/load-balancer/load-balancer-store-api.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/cluster/ecs-cluster-store-api.yaml"
 
 ./scripts/helpers/cf_outputs_save.sh
 

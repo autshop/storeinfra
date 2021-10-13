@@ -58,7 +58,50 @@ Parameters:
     Type: Number
     Default: 1
 
+  EnvDbUsername:
+    Description: DB Username Enviroment Variable.
+    Type: String
+
+  EnvDbPassword:
+    Description: DB Password Enviroment Variable.
+    Type: String
+
+  EnvDbServer:
+    Description: DB Server Enviroment Variable.
+    Type: String
+
+  EnvDbName:
+    Description: DB Name Enviroment Variable.
+    Type: String
+
+  EnvDbPort:
+    Description: DB Port Enviroment Variable.
+    Type: String
+
 Resources:
+  SecretsStoreAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store-api.yaml
+      Parameters:
+        TenantId: !Ref TenantId
+        EnvDbUsername: !Ref EnvDbUsername
+        EnvDbPassword: !Ref EnvDbPassword
+        EnvDbServer: !Ref EnvDbServer
+        EnvDbName: !Ref EnvDbName
+        EnvDbPort: !Ref EnvDbPort
+
+  ECSTaskExecutionRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/iam/ecs-task-execution-role.yaml
+      Parameters:
+        TenantId: !Ref TenantId
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
+
   ECSServiceStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -71,6 +114,14 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         Priority: !Ref Priority
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
+        ExecutionRoleArn:
+          Fn::GetAtt:
+            - ECSTaskExecutionRole
+            - Outputs.RoleArn
 
   RecordSetStoreAPI:
     Type: AWS::CloudFormation::Stack
@@ -105,5 +156,5 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
-        CanonicalHostedZoneIDStorefront: !Ref CanonicalHostedZoneIDStorefront
+        CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStorefront
 
