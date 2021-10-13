@@ -96,4 +96,17 @@ Resources:
             - ECSTaskExecutionRole
             - Outputs.RoleArn
 
-
+  RecordSetCoreAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-core-api.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        LoadBalancerDNS:
+          Fn::GetAtt:
+            - ALB
+            - Outputs.LoadBalancerUrl
+        CanonicalHostedZoneIDCoreAPI:
+          Fn::GetAtt:
+            - ALB
+            - Outputs.CanonicalHostedZoneID

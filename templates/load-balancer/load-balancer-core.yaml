@@ -60,3 +60,7 @@ Outputs:
   Listener:
     Description: A reference to a port 80 listener
     Value: !Ref LoadBalancerListener
+
+  CanonicalHostedZoneID:
+    Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Value: !GetAtt LoadBalancer.CanonicalHostedZoneID
