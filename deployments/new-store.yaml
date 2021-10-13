@@ -61,27 +61,22 @@ Parameters:
   EnvDbUsername:
     Description: DB Username Enviroment Variable.
     Type: String
-    Default: "TODO remove!"
 
   EnvDbPassword:
     Description: DB Password Enviroment Variable.
     Type: String
-    Default: "TODO remove!"
 
   EnvDbServer:
     Description: DB Server Enviroment Variable.
     Type: String
-    Default: "TODO remove!"
 
   EnvDbName:
     Description: DB Name Enviroment Variable.
     Type: String
-    Default: "TODO remove!"
 
   EnvDbPort:
     Description: DB Port Enviroment Variable.
     Type: String
-    Default: "TODO remove!"
 
 Resources:
   SecretsStoreAPI:
@@ -138,4 +133,28 @@ Resources:
         TenantName: !Ref TenantName
         LoadBalancerDNS: !Ref LoadBalancerDNSStoreAPI
         CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStoreAPI
+
+  ECSServiceStorefront:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-storefront.yaml
+      Parameters:
+        VPC: !Ref VPC
+        Cluster: !Ref ClusterStorefront
+        DesiredCount: 2
+        Listener: !Ref ListenerStorefront
+        TenantId: !Ref TenantId
+        TenantName: !Ref TenantName
+        Priority: !Ref Priority
+
+  RecordSetStorefront:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-storefront.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        TenantId: !Ref TenantId
+        TenantName: !Ref TenantName
+        LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
+        CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStorefront
 
