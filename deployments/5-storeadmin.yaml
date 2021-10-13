@@ -1,0 +1,28 @@
+Description: >
+
+  Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
+
+  Template for Storeadmin S3 Bucket and Hosted Zone.
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Sub 'admin.${TenantName}.shop.akosfi.com'
+      WebsiteConfiguration:
+        ErrorDocument: 'error.html'
+        IndexDocument: 'index.html'
+
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Action: 's3:GetObject'
+            Principal: '*'
+            Resource: !Sub '${S3Bucket.Arn}/*'
