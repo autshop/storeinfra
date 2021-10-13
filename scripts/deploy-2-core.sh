@@ -28,6 +28,8 @@ done
 ./scripts/helpers/s3_template_upload.sh -t "templates/load-balancer/load-balancer-core.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/cluster/ecs-cluster-core.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/service/ecs-service-core-api.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/iam/ecs-core-api-task-execution-role.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/secrets-manager/secrets-core-api.yaml"
 
 ./scripts/helpers/cf_outputs_save.sh
 

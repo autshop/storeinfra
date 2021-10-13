@@ -24,6 +24,14 @@ Parameters:
     Type: String
     Default: /api/*
 
+  SecretArn:
+    Description: Arn of secret.
+    Type: String
+
+  ExecutionRoleArn:
+    Description: Arn of role.
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -43,6 +51,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: core-api
+      ExecutionRoleArn: !Ref ExecutionRoleArn
       ContainerDefinitions:
         - Name: core-api
           Essential: true
@@ -55,6 +64,11 @@ Resources:
             Options:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
+          Secrets:
+            - Name: AWS_ACCESS_KEY_ID
+              ValueFrom: !Join [":", [!Ref SecretArn, "AWS_ACCESS_KEY_ID::"]]
+            - Name: AWS_SECRET_ACCESS_KEY
+              ValueFrom: !Join [":", [!Ref SecretArn, "AWS_SECRET_ACCESS_KEY::"]]
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
