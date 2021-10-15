@@ -36,77 +36,20 @@ Parameters:
     Description: AWS Secret Access Key Enviroment Variable.
     Type: String
 
+  HostedZoneId:
+    Description: Hosted Zone id.
+    Type: String
+
 Resources:
-  SecretsCoreAPI:
+  S3BucketShopHome:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-core-api.yaml
-      Parameters:
-        EnvAWSAccessKeyId: !Ref EnvAWSAccessKeyId
-        EnvAWSSecretAccessKey: !Ref EnvAWSSecretAccessKey
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/s3/s3-bucket-shophome.yaml
 
-  ECSTaskExecutionRole:
+  HostedZoneRecordShopHome:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/iam/ecs-core-api-task-execution-role.yaml
-      Parameters:
-        SecretArn:
-          Fn::GetAtt:
-            - SecretsStoreAPI
-            - Outputs.SecretArn
-
-  ALB:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/load-balancer/load-balancer-core.yaml
-      Parameters:
-        EnvironmentName: !Ref EnvironmentName
-        VPC: !Ref VPC
-        Subnets: !Ref PublicSubnets
-        SecurityGroup: !Ref LoadBalancerSecurityGroup
-
-  ECS:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/cluster/ecs-cluster-core.yaml
-      Parameters:
-        EnvironmentName: !Ref AWS::StackName
-        InstanceType: t2.micro
-        ClusterSize: 4
-        VPC: !Ref VPC
-        SecurityGroup: !Ref ECSHostSecurityGroup
-        Subnets: !Ref PrivateSubnets
-
-  ECSServiceCoreApi:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-core-api.yaml
-      Parameters:
-        VPC: !Ref VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 2
-        Listener: !GetAtt ALB.Outputs.Listener
-        Path: /api/*
-        SecretArn:
-          Fn::GetAtt:
-            - SecretsCoreAPI
-            - Outputs.SecretArn
-        ExecutionRoleArn:
-          Fn::GetAtt:
-            - ECSTaskExecutionRole
-            - Outputs.RoleArn
-
-  RecordSetCoreAPI:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-core-api.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-shophome.yaml
       Parameters:
         HostedZoneId: !Ref HostedZoneId
-        LoadBalancerDNS:
-          Fn::GetAtt:
-            - ALB
-            - Outputs.LoadBalancerUrl
-        CanonicalHostedZoneIDCoreAPI:
-          Fn::GetAtt:
-            - ALB
-            - Outputs.CanonicalHostedZoneID
+    DependsOn: S3BucketShopHome

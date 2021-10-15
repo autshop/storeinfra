@@ -30,6 +30,8 @@ done
 ./scripts/helpers/s3_template_upload.sh -t "templates/service/ecs-service-core-api.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/iam/ecs-core-api-task-execution-role.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/secrets-manager/secrets-core-api.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/s3/s3-bucket-shophome.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/hosted-zone/hosted-zone-record-shophome.yaml"
 
 ./scripts/helpers/cf_outputs_save.sh
 
@@ -43,6 +45,8 @@ LoadBalancerSecurityGroup=$(cf_outputs_get LoadBalancerSecurityGroup)
 aws cloudformation deploy \
     --template-file ./deployments/2-core.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME-core" \
-    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" \
+    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" HostedZoneId="$HostedZoneId" EnvAWSAccessKeyId="$AWS_ACCESS_KEY" EnvAWSSecretAccessKey="$AWS_ACCESS_SECRET" \
     --capabilities CAPABILITY_NAMED_IAM
+
+aws s3 sync s3://autshop/shophome s3://shop.akosfi.com --delete
 

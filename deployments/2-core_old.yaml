@@ -1,0 +1,112 @@
+Description: >
+  Copyright; https://github.com/aws-samples/ecs-refarch-cloudformation/tree/master/infrastructure
+
+  Template for Core components.
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+
+  VPC:
+    Description: Choose which VPC the Application Load Balancer should be deployed to
+    Type: String
+
+  PublicSubnets:
+    Description: Choose which subnets the Application Load Balancer should be deployed to
+    Type: String
+
+  PrivateSubnets:
+    Description: Choose which subnets this ECS cluster should be deployed to
+    Type: String
+
+  ECSHostSecurityGroup:
+    Description: Select the Security Group to use for the ECS cluster hosts
+    Type: AWS::EC2::SecurityGroup::Id
+
+  LoadBalancerSecurityGroup:
+    Description: Select the Security Group to apply to the Application Load Balancer
+    Type: AWS::EC2::SecurityGroup::Id
+
+  EnvAWSAccessKeyId:
+    Description: AWS Access Key Id Enviroment Variable.
+    Type: String
+
+  EnvAWSSecretAccessKey:
+    Description: AWS Secret Access Key Enviroment Variable.
+    Type: String
+
+Resources:
+  SecretsCoreAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-core-api.yaml
+      Parameters:
+        EnvAWSAccessKeyId: !Ref EnvAWSAccessKeyId
+        EnvAWSSecretAccessKey: !Ref EnvAWSSecretAccessKey
+
+  ECSTaskExecutionRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/iam/ecs-core-api-task-execution-role.yaml
+      Parameters:
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
+
+  ALB:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/load-balancer/load-balancer-core.yaml
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        VPC: !Ref VPC
+        Subnets: !Ref PublicSubnets
+        SecurityGroup: !Ref LoadBalancerSecurityGroup
+
+  ECS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/cluster/ecs-cluster-core.yaml
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        InstanceType: t2.micro
+        ClusterSize: 4
+        VPC: !Ref VPC
+        SecurityGroup: !Ref ECSHostSecurityGroup
+        Subnets: !Ref PrivateSubnets
+
+  ECSServiceCoreApi:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/service/ecs-service-core-api.yaml
+      Parameters:
+        VPC: !Ref VPC
+        Cluster: !GetAtt ECS.Outputs.Cluster
+        DesiredCount: 2
+        Listener: !GetAtt ALB.Outputs.Listener
+        Path: /api/*
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsCoreAPI
+            - Outputs.SecretArn
+        ExecutionRoleArn:
+          Fn::GetAtt:
+            - ECSTaskExecutionRole
+            - Outputs.RoleArn
+
+  RecordSetCoreAPI:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-core-api.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        LoadBalancerDNS:
+          Fn::GetAtt:
+            - ALB
+            - Outputs.LoadBalancerUrl
+        CanonicalHostedZoneIDCoreAPI:
+          Fn::GetAtt:
+            - ALB
+            - Outputs.CanonicalHostedZoneID
