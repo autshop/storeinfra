@@ -1,0 +1,27 @@
+Description: >
+  ECS Core Api hosted zone template for core services.
+
+Parameters:
+  HostedZoneId:
+    Description: Id of hosted zone.
+    Type: String
+
+  LoadBalancerDNS:
+    Description: DNS of Load Balancer where traffic will be routed.
+    Type: String
+
+  CanonicalHostedZoneIDCoreAPI:
+    Description: The ID of the Amazon Route 53 hosted zone associated with the load balancer
+    Type: String
+
+Resources:
+  RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub api.shop.akosfi.com
+      AliasTarget:
+        DNSName: !Ref LoadBalancerDNS
+        EvaluateTargetHealth: true
+        HostedZoneId: !Ref CanonicalHostedZoneIDCoreAPI
+      Type: A
