@@ -4,6 +4,12 @@ Description: >
 
   Template for Storeadmin S3 Bucket and Hosted Zone.
 
+
+Parameters:
+  TenantName:
+    Description: Tenant Name.
+    Type: String
+
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket

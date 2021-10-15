@@ -32,7 +32,9 @@ done
 
 ./scripts/helpers/s3_template_upload.sh -t "templates/vpc/vpc.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/security-group/security-groups.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-source-credential.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storefront.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storeadmin.yaml"
 
 aws cloudformation deploy \
     --template-file ./deployments/1-common.yaml \

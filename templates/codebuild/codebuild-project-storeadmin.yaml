@@ -1,20 +1,11 @@
 Description: >
-  Codebuild project template for Shop Storefront.
-
-Parameters:
-  DockerHubUsername:
-    Description: DockerHub username.
-    Type: String
-
-  DockerHubPassword:
-    Description: DockerHub password.
-    Type: String
+  Codebuild project template for Shop Admin.
 
 Resources:
   CodeBuildServiceRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: codebuild-shop-storefront-service-role
+      RoleName: codebuild-shop-storeadmin-service-role
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -24,11 +15,15 @@ Resources:
             Principal:
               Service:
                 - codebuild.amazonaws.com
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchFullAccess
 
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: shop-storefront
+      Name: shop-storeadmin
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Environment:
         Type: LINUX_CONTAINER
@@ -36,21 +31,11 @@ Resources:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0-21.04.23
         PrivilegedMode: true
         EnvironmentVariables:
-          - Name: DOCKERHUB_USERNAME
-            Value: !Ref DockerHubUsername
-          - Name: DOCKERHUB_PASSWORD
-            Value: !Ref DockerHubPassword
-          - Name: NEXT_SERVER_PORT
-            Value: 8080
-          - Name: NEXT_PUBLIC_TENANT_NAME
-            Value: default
-          - Name: NEXT_PUBLIC_SERVER_URL
-            Value: http://api.default.shop.akosfi.com
           - Name: TENANT_ID
             Value: 1
       Source:
         Type: GITHUB
-        Location: https://github.com/autshop/storefront.git
+        Location: https://github.com/autshop/storeadmin.git
         Auth:
           Resource: NO_NEED_TO_SPECIFY_THIS_ACCORDING_TO_DOCS
           Type: OAUTH
@@ -64,6 +49,4 @@ Resources:
       TimeoutInMinutes: 10
       LogsConfig:
         CloudWatchLogs:
-          Status: DISABLED
-        S3Logs:
-          Status: DISABLED
+          Status: ENABLED
