@@ -82,7 +82,7 @@ Resources:
   SecretsStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store-api.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store.yaml
       Parameters:
         TenantId: !Ref TenantId
         EnvDbUsername: !Ref EnvDbUsername
@@ -90,6 +90,9 @@ Resources:
         EnvDbServer: !Ref EnvDbServer
         EnvDbName: !Ref EnvDbName
         EnvDbPort: !Ref EnvDbPort
+        EnvServerURL:
+          - "http://api.${TenantName}.shop.akosfi.com"
+          - { Domain: !Ref TenantName }
 
   ECSTaskExecutionRole:
     Type: AWS::CloudFormation::Stack
