@@ -65,6 +65,22 @@ Resources:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
           Secrets:
+            - Name: DB_USERNAME
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_USERNAME::"]]
+            - Name: DB_PASSWORD
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_PASSWORD::"]]
+            - Name: DB_SERVER
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_SERVER::"]]
+            - Name: DB_NAME
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_NAME::"]]
+            - Name: DB_PORT
+              ValueFrom: !Join [":", [!Ref SecretArn, "DB_PORT::"]]
+            - Name: PORT
+              ValueFrom: !Join [":", [!Ref SecretArn, "PORT::"]]
+            - Name: JWT_SECRET
+              ValueFrom: !Join [":", [!Ref SecretArn, "JWT_SECRET::"]]
+            - Name: ELEPHANTSQL_API_KEY
+              ValueFrom: !Join [":", [!Ref SecretArn, "ELEPHANTSQL_API_KEY::"]]
             - Name: AWS_ACCESS_KEY_ID
               ValueFrom: !Join [":", [!Ref SecretArn, "AWS_ACCESS_KEY_ID::"]]
             - Name: AWS_SECRET_ACCESS_KEY
@@ -85,7 +101,7 @@ Resources:
       Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /api/store
+      HealthCheckPath: /api/aws
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2

@@ -35,6 +35,7 @@ done
 ./scripts/helpers/s3_template_upload.sh -t "templates/secrets-manager/secrets-core-api.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/s3/s3-bucket-shophome.yaml"
 ./scripts/helpers/s3_template_upload.sh -t "templates/hosted-zone/hosted-zone-record-shophome.yaml"
+./scripts/helpers/s3_template_upload.sh -t "templates/hosted-zone/hosted-zone-record-core-api.yaml"
 
 ./scripts/helpers/cf_outputs_save.sh
 
