@@ -90,9 +90,10 @@ Resources:
         EnvDbServer: !Ref EnvDbServer
         EnvDbName: !Ref EnvDbName
         EnvDbPort: !Ref EnvDbPort
-        EnvServerURL:
+        EnvServerURL: !Sub
           - "http://api.${TenantName}.shop.akosfi.com"
           - { Domain: !Ref TenantName }
+        EnvTenantName: !Ref TenantName
 
   ECSTaskExecutionRole:
     Type: AWS::CloudFormation::Stack
@@ -149,6 +150,14 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         Priority: !Ref Priority
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
+        ExecutionRoleArn:
+          Fn::GetAtt:
+            - ECSTaskExecutionRole
+            - Outputs.RoleArn
 
   RecordSetStorefront:
     Type: AWS::CloudFormation::Stack
@@ -159,5 +168,5 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
-        CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStorefront
+        CanonicalHostedZoneIDStorefront: !Ref CanonicalHostedZoneIDStorefront
 
