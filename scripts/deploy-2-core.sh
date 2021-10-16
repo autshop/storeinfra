@@ -13,6 +13,9 @@ while [ $# -gt 0 ]; do
     --s=*)
       AWS_ACCESS_SECRET="${1#*=}"
       ;;
+    --a=*)
+      SECRETS_CORE_API_ARN="${1#*=}"
+      ;;
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument.*\n"
@@ -45,7 +48,7 @@ LoadBalancerSecurityGroup=$(cf_outputs_get LoadBalancerSecurityGroup)
 aws cloudformation deploy \
     --template-file ./deployments/2-core.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME-core" \
-    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" HostedZoneId="$HostedZoneId" EnvAWSAccessKeyId="$AWS_ACCESS_KEY" EnvAWSSecretAccessKey="$AWS_ACCESS_SECRET" \
+    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" HostedZoneId="$HostedZoneId" SecretsCoreAPIArn="$SECRETS_CORE_API_ARN" \
     --capabilities CAPABILITY_NAMED_IAM
 
 aws s3 sync s3://autshop/shophome s3://shop.akosfi.com --delete
