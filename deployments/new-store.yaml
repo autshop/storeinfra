@@ -170,3 +170,19 @@ Resources:
         LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
         CanonicalHostedZoneIDStorefront: !Ref CanonicalHostedZoneIDStorefront
 
+  S3BucketShopAdmin:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/s3/s3-bucket-shopadmin.yaml
+      Parameters:
+        TenantName: !Ref TenantName
+
+  HostedZoneRecordShopHome:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-shopadmin.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        TenantName: !Ref TenantName
+    DependsOn: S3BucketShopAdmin
+

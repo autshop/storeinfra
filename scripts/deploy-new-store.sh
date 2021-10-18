@@ -52,7 +52,11 @@ StorefrontCluster=$(cf_outputs_get StorefrontCluster)
 LoadBalancerUrlStorefront=$(cf_outputs_get LoadBalancerUrlStorefront)
 CanonicalHostedZoneIDStorefront=$(cf_outputs_get CanonicalHostedZoneIDStorefront)
 
-./scripts/helpers/codebuild.sh -i "$TENANT_ID" -n "$TENANT_NAME"
+#./scripts/helpers/codebuild_storefront.sh -i "$TENANT_ID" -n "$TENANT_NAME"
+
+aws s3 mb "s3://autshop/admin-$TENANT_ID"
+
+#run codebuild for shopadmin here
 
 aws cloudformation deploy \
     --template-file ./deployments/new-store.yaml \
@@ -60,3 +64,4 @@ aws cloudformation deploy \
     --parameter-overrides VPC="$VPC" ClusterStoreAPI="$StoreAPICluster" ClusterStorefront="$StorefrontCluster" TenantId=$(expr $TENANT_ID + 0) TenantName="$TENANT_NAME" HostedZoneId="$HostedZoneId" LoadBalancerDNSStoreAPI="$LoadBalancerUrlStoreAPI" LoadBalancerDNSStorefront="$LoadBalancerUrlStorefront" CanonicalHostedZoneIDStoreAPI="$CanonicalHostedZoneIDStoreAPI" CanonicalHostedZoneIDStorefront="$CanonicalHostedZoneIDStorefront" ListenerStoreAPI="$ALBListenerStoreAPI" ListenerStorefront="$ALBListenerStorefront" Priority=$(expr $PRIORITY + 0)\
     --capabilities CAPABILITY_NAMED_IAM
 
+aws s3 sync "s3://autshop/admin-$TENANT_ID" "s3://admin.$TENANT_NAME.shop.akosfi.com" --delete

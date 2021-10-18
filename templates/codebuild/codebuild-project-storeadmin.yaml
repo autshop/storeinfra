@@ -33,6 +33,8 @@ Resources:
         EnvironmentVariables:
           - Name: TENANT_ID
             Value: 1
+          - Name: REACT_APP_SERVER_URL
+            Value: localhost
       Source:
         Type: GITHUB
         Location: https://github.com/autshop/storeadmin.git
