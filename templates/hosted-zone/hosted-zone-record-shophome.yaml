@@ -6,18 +6,12 @@ Parameters:
     Description: Id of hosted zone.
     Type: String
 
-  TenantName:
-    Description: Name of Tenant.
-    Type: String
-
 Resources:
   RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId: !Ref HostedZoneId
-      Name: !Sub
-        - "admin.${TenantName}.shop.akosfi.com"
-        - { TenantName: !Ref TenantName }
+      Name: "shop.akosfi.com"
       AliasTarget:
         #https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints
         HostedZoneId: "Z3R1K369G5AVDG"

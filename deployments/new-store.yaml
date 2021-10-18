@@ -177,7 +177,7 @@ Resources:
       Parameters:
         TenantName: !Ref TenantName
 
-  HostedZoneRecordShopHome:
+  HostedZoneRecordShopAdmin:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-shopadmin.yaml

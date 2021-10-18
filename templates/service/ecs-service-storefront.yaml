@@ -63,7 +63,7 @@ Resources:
       ContainerDefinitions:
         - Name: storefront
           Essential: true
-          Image: docker.io/akosfi/storefront:latest
+          Image: !Join [ ":", [ "docker.io/akosfi/storefront", !Ref TenantId ] ]
           Memory: 256
           PortMappings:
             - ContainerPort: 8080

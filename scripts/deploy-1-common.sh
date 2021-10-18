@@ -13,6 +13,12 @@ while [ $# -gt 0 ]; do
      --t=*)
       GITHUB_ACCESS_TOKEN="${1#*=}"
       ;;
+     --n=*)
+      DOCKERHUB_USERNAME="${1#*=}"
+      ;;
+     --p=*)
+      DOCKERHUB_PASSWORD="${1#*=}"
+      ;;
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument.*\n"
@@ -35,5 +41,5 @@ done
 aws cloudformation deploy \
     --template-file ./deployments/1-common.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME" \
-    --parameter-overrides GithubAccessToken="$GITHUB_ACCESS_TOKEN" \
+    --parameter-overrides GithubAccessToken="$GITHUB_ACCESS_TOKEN" DockerHubUsername="$DOCKERHUB_USERNAME" DockerHubPassword="$DOCKERHUB_PASSWORD" \
     --capabilities CAPABILITY_NAMED_IAM
