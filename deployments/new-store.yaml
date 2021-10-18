@@ -113,7 +113,7 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref ClusterStoreAPI
-        DesiredCount: 2
+        DesiredCount: 1
         Listener: !Ref ListenerStoreAPI
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
@@ -145,7 +145,7 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref ClusterStorefront
-        DesiredCount: 2
+        DesiredCount: 1
         Listener: !Ref ListenerStorefront
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName

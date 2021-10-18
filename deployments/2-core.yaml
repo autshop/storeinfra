@@ -73,7 +73,7 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 2
+        DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /api/*
         SecretArn: !Ref SecretsCoreAPIArn

@@ -30,6 +30,8 @@ done
 #./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storefront.yaml"
 #./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storeadmin.yaml"
 
+./scripts/helpers/upload-deployments.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET"
+
 aws cloudformation deploy \
     --template-file ./deployments/1-common.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME" \
