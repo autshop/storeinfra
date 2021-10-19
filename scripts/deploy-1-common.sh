@@ -30,12 +30,6 @@ done
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
-./scripts/helpers/s3_template_upload.sh -t "templates/vpc/vpc.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/security-group/security-groups.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-source-credential.yaml"
-#./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storefront.yaml"
-#./scripts/helpers/s3_template_upload.sh -t "templates/codebuild/codebuild-project-storeadmin.yaml"
-
 ./scripts/helpers/upload_deployments.sh --k="$AWS_ACCESS_KEY" --s="$AWS_ACCESS_SECRET"
 
 aws cloudformation deploy \

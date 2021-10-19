@@ -19,9 +19,6 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-
-./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
-
 aws s3 sync ./deployments s3://autshop/deployments --delete
 aws s3 sync ./templates s3://autshop/templates --delete
 

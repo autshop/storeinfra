@@ -45,7 +45,6 @@ while [ $# -gt 0 ]; do
 done
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY_ID" -s "$AWS_SECRET_ACCESS_KEY" -b "$AWS_S3_BUCKET_NAME"
-./scripts/helpers/s3_template_upload.sh -t "templates/secrets-manager/secrets-core-api.yaml"
 
 
 aws cloudformation deploy \

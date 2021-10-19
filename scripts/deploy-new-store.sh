@@ -33,13 +33,6 @@ done
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
 
-./scripts/helpers/s3_template_upload.sh -t "templates/iam/ecs-task-execution-role.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/secrets-manager/secrets-store.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/service/ecs-service-store-api.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/hosted-zone/hosted-zone-record-store-api.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/service/ecs-service-storefront.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/hosted-zone/hosted-zone-record-storefront.yaml"
-
 ./scripts/helpers/cf_outputs_save.sh
 
 VPC=$(cf_outputs_get VPC)
