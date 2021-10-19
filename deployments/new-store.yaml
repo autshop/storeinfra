@@ -186,3 +186,19 @@ Resources:
         TenantName: !Ref TenantName
     DependsOn: S3BucketShopAdmin
 
+  S3BucketShopCDN:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/s3/s3-bucket-shopcdn.yaml
+      Parameters:
+        TenantName: !Ref TenantName
+
+  HostedZoneRecordShopCDN:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-shopcdn.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        TenantName: !Ref TenantName
+    DependsOn: S3BucketShopCDN
+

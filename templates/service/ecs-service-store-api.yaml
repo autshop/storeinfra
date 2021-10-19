@@ -83,6 +83,8 @@ Resources:
               ValueFrom: !Join [":", [!Ref SecretArn, "DB_NAME::"]]
             - Name: DB_PORT
               ValueFrom: !Join [":", [!Ref SecretArn, "DB_PORT::"]]
+            - Name: TENANT_NAME
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "NEXT_PUBLIC_TENANT_NAME::" ] ] #TODO rename to general env var
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup

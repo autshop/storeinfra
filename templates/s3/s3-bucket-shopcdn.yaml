@@ -1,0 +1,33 @@
+Description: >
+  Template for Shop CDN.
+
+Parameters:
+  TenantName:
+    Description: Name of Tenant.
+    Type: String
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub
+        - "cdn.${TenantName}.shop.akosfi.com"
+        - { TenantName: !Ref TenantName }
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+
+  MyBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join [ '', [ 'arn:aws:s3:::', !Ref Bucket, /* ] ]
