@@ -85,6 +85,10 @@ Resources:
               ValueFrom: !Join [":", [!Ref SecretArn, "AWS_ACCESS_KEY_ID::"]]
             - Name: AWS_SECRET_ACCESS_KEY
               ValueFrom: !Join [":", [!Ref SecretArn, "AWS_SECRET_ACCESS_KEY::"]]
+            - Name: AWS_CDN_ACCESS_KEY_ID
+              ValueFrom: !Join [":", [!Ref SecretArn, "AWS_CDN_ACCESS_KEY_ID::"]]
+            - Name: AWS_CDN_SECRET_ACCESS_KEY
+              ValueFrom: !Join [":", [!Ref SecretArn, "AWS_CDN_SECRET_ACCESS_KEY::"]]
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
