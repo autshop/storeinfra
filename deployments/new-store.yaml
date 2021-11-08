@@ -78,11 +78,19 @@ Parameters:
     Description: DB Port Enviroment Variable.
     Type: String
 
+  EnvCDNAWSAccessKeyId:
+    Description: AWS CDN Access Key Id Enviroment Variable.
+    Type: String
+
+  EnvCDNAWSSecretAccessKey:
+    Description: AWS CDN Secret Access Key Enviroment Variable.
+    Type: String
+
 Resources:
   SecretsStoreAPI:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store-api.yaml
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-store.yaml
       Parameters:
         TenantId: !Ref TenantId
         EnvDbUsername: !Ref EnvDbUsername
@@ -90,6 +98,12 @@ Resources:
         EnvDbServer: !Ref EnvDbServer
         EnvDbName: !Ref EnvDbName
         EnvDbPort: !Ref EnvDbPort
+        EnvServerURL: !Sub
+          - "http://api.${TenantName}.shop.akosfi.com"
+          - { Domain: !Ref TenantName }
+        EnvTenantName: !Ref TenantName
+        EnvCDNAWSAccessKeyId: !Ref EnvCDNAWSAccessKeyId
+        EnvCDNAWSSecretAccessKey: !Ref EnvCDNAWSSecretAccessKey
 
   ECSTaskExecutionRole:
     Type: AWS::CloudFormation::Stack
@@ -109,7 +123,7 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref ClusterStoreAPI
-        DesiredCount: 2
+        DesiredCount: 1
         Listener: !Ref ListenerStoreAPI
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
@@ -141,11 +155,19 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref ClusterStorefront
-        DesiredCount: 2
+        DesiredCount: 1
         Listener: !Ref ListenerStorefront
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         Priority: !Ref Priority
+        SecretArn:
+          Fn::GetAtt:
+            - SecretsStoreAPI
+            - Outputs.SecretArn
+        ExecutionRoleArn:
+          Fn::GetAtt:
+            - ECSTaskExecutionRole
+            - Outputs.RoleArn
 
   RecordSetStorefront:
     Type: AWS::CloudFormation::Stack
@@ -156,5 +178,37 @@ Resources:
         TenantId: !Ref TenantId
         TenantName: !Ref TenantName
         LoadBalancerDNS: !Ref LoadBalancerDNSStorefront
-        CanonicalHostedZoneIDStoreAPI: !Ref CanonicalHostedZoneIDStorefront
+        CanonicalHostedZoneIDStorefront: !Ref CanonicalHostedZoneIDStorefront
+
+  S3BucketShopAdmin:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/s3/s3-bucket-shopadmin.yaml
+      Parameters:
+        TenantName: !Ref TenantName
+
+  HostedZoneRecordShopAdmin:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-shopadmin.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        TenantName: !Ref TenantName
+    DependsOn: S3BucketShopAdmin
+
+  S3BucketShopCDN:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/s3/s3-bucket-shopcdn.yaml
+      Parameters:
+        TenantName: !Ref TenantName
+
+  HostedZoneRecordShopCDN:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/hosted-zone/hosted-zone-record-shopcdn.yaml
+      Parameters:
+        HostedZoneId: !Ref HostedZoneId
+        TenantName: !Ref TenantName
+    DependsOn: S3BucketShopCDN
 

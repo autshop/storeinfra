@@ -13,6 +13,9 @@ while [ $# -gt 0 ]; do
     --s=*)
       AWS_ACCESS_SECRET="${1#*=}"
       ;;
+    --a=*)
+      SECRETS_CORE_API_ARN="${1#*=}"
+      ;;
     *)
       printf "***************************\n"
       printf "* Error: Invalid argument.*\n"
@@ -24,14 +27,6 @@ done
 
 
 ./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
-
-./scripts/helpers/s3_template_upload.sh -t "templates/load-balancer/load-balancer-core.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/cluster/ecs-cluster-core.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/service/ecs-service-core-api.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/iam/ecs-core-api-task-execution-role.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/secrets-manager/secrets-core-api.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/s3/s3-bucket-shophome.yaml"
-./scripts/helpers/s3_template_upload.sh -t "templates/hosted-zone/hosted-zone-record-shophome.yaml"
 
 ./scripts/helpers/cf_outputs_save.sh
 
@@ -45,7 +40,7 @@ LoadBalancerSecurityGroup=$(cf_outputs_get LoadBalancerSecurityGroup)
 aws cloudformation deploy \
     --template-file ./deployments/2-core.yaml \
     --stack-name "$CLOUDFORMATION_STACK_NAME-core" \
-    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" HostedZoneId="$HostedZoneId" EnvAWSAccessKeyId="$AWS_ACCESS_KEY" EnvAWSSecretAccessKey="$AWS_ACCESS_SECRET" \
+    --parameter-overrides EnvironmentName="$CLOUDFORMATION_STACK_NAME-core" VPC="$VPC" PublicSubnets="$PublicSubnets" PrivateSubnets="$PrivateSubnets" ECSHostSecurityGroup="$ECSHostSecurityGroup" LoadBalancerSecurityGroup="$LoadBalancerSecurityGroup" HostedZoneId="$HostedZoneId" SecretsCoreAPIArn="$SECRETS_CORE_API_ARN" \
     --capabilities CAPABILITY_NAMED_IAM
 
 aws s3 sync s3://autshop/shophome s3://shop.akosfi.com --delete

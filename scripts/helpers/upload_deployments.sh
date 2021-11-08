@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/helpers/variables.sh
+
 while [ $# -gt 0 ]; do
   case "$1" in
     --k=*)
@@ -7,9 +9,6 @@ while [ $# -gt 0 ]; do
       ;;
     --s=*)
       AWS_ACCESS_SECRET="${1#*=}"
-      ;;
-    --b=*)
-      AWS_S3_BUCKET_NAME="${1#*=}"
       ;;
     *)
       printf "***************************\n"
@@ -20,9 +19,8 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+aws s3 sync ./deployments s3://autshop/deployments --delete
+aws s3 sync ./templates s3://autshop/templates --delete
 
-./scripts/helpers/aws_initialize.sh -k "$AWS_ACCESS_KEY" -s "$AWS_ACCESS_SECRET" -b "$AWS_S3_BUCKET_NAME"
-
-./scripts/helpers/s3_template_upload.sh -t "deployments/new-store.yaml"
 
 

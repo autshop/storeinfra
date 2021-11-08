@@ -3,16 +3,16 @@ Description: >
   Template for VPC, Security Groups and CodeBuild project.
 
 Parameters:
+  GithubAccessToken:
+    Description: Github Personal Access Token.
+    Type: String
+
   DockerHubUsername:
     Description: DockerHub username.
     Type: String
 
   DockerHubPassword:
     Description: DockerHub password.
-    Type: String
-
-  GithubAccessToken:
-    Description: Github Personal Access Token.
     Type: String
 
 Resources:
@@ -36,24 +36,24 @@ Resources:
         EnvironmentName: !Ref AWS::StackName
         VPC: !GetAtt VPC.Outputs.VPC
 
-  #CodeBuildSourceCredential:
-  #  Type: AWS::CloudFormation::Stack
-  #  Properties:
-  #    TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-source-credential.yaml
-  #    Parameters:
-  #      GithubAccessToken: !Ref GithubAccessToken
+  CodeBuildSourceCredential:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-source-credential.yaml
+      Parameters:
+        GithubAccessToken: !Ref GithubAccessToken
 
-  #CodeBuildStorefront:
-  #  Type: AWS::CloudFormation::Stack
-  #  Properties:
-  #    TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storefront.yaml
-  #    Parameters:
-  #      DockerHubUsername: !Ref DockerHubUsername
-  #      DockerHubPassword: !Ref DockerHubPassword
-  #  DependsOn: CodeBuildSourceCredential
+  CodeBuildStorefront:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storefront.yaml
+      Parameters:
+        DockerHubUsername: !Ref DockerHubUsername
+        DockerHubPassword: !Ref DockerHubPassword
+    DependsOn: CodeBuildSourceCredential
 
-  #CodeBuildStoreadmin:
-  #  Type: AWS::CloudFormation::Stack
-  #  Properties:
-  #    TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storeadmin.yaml
-#  DependsOn: CodeBuildSourceCredential
+  CodeBuildStoreadmin:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/codebuild/codebuild-project-storeadmin.yaml
+    DependsOn: CodeBuildSourceCredential

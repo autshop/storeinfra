@@ -13,7 +13,7 @@ Parameters:
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
     Type: Number
-    Default: 2
+    Default: 1
 
   Listener:
     Description: The Application Load Balancer listener to register with
@@ -83,6 +83,14 @@ Resources:
               ValueFrom: !Join [":", [!Ref SecretArn, "DB_NAME::"]]
             - Name: DB_PORT
               ValueFrom: !Join [":", [!Ref SecretArn, "DB_PORT::"]]
+            - Name: TENANT_NAME
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "NEXT_PUBLIC_TENANT_NAME::" ] ] #TODO rename to general env var
+            - Name: AWS_ACCESS_KEY_ID
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "AWS_CDN_ACCESS_KEY_ID::" ] ]
+            - Name: AWS_SECRETS_ACCESS_KEY
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "AWS_CDN_SECRET_ACCESS_KEY::" ] ]
+            - Name: CORE_API_URL
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "CORE_API_URL::" ] ]
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup

@@ -28,36 +28,21 @@ Parameters:
     Description: Select the Security Group to apply to the Application Load Balancer
     Type: AWS::EC2::SecurityGroup::Id
 
-  EnvAWSAccessKeyId:
-    Description: AWS Access Key Id Enviroment Variable.
-    Type: String
-
-  EnvAWSSecretAccessKey:
-    Description: AWS Secret Access Key Enviroment Variable.
-    Type: String
-
   HostedZoneId:
     Description: Hosted Zone id.
     Type: String
 
-Resources:
-  SecretsCoreAPI:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/secrets-manager/secrets-core-api.yaml
-      Parameters:
-        EnvAWSAccessKeyId: !Ref EnvAWSAccessKeyId
-        EnvAWSSecretAccessKey: !Ref EnvAWSSecretAccessKey
+  SecretsCoreAPIArn:
+    Description: Core API Secret ARN.
+    Type: String
 
+Resources:
   ECSTaskExecutionRole:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://autshop.s3.eu-west-3.amazonaws.com/templates/iam/ecs-core-api-task-execution-role.yaml
       Parameters:
-        SecretArn:
-          Fn::GetAtt:
-            - SecretsStoreAPI
-            - Outputs.SecretArn
+        SecretArn: !Ref SecretsCoreAPIArn
 
   ALB:
     Type: AWS::CloudFormation::Stack
@@ -88,13 +73,10 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 2
+        DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /api/*
-        SecretArn:
-          Fn::GetAtt:
-            - SecretsCoreAPI
-            - Outputs.SecretArn
+        SecretArn: !Ref SecretsCoreAPIArn
         ExecutionRoleArn:
           Fn::GetAtt:
             - ECSTaskExecutionRole

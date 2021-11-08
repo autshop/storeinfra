@@ -13,7 +13,7 @@ Parameters:
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
     Type: Number
-    Default: 2
+    Default: 1
 
   Listener:
     Description: The Application Load Balancer listener to register with
@@ -31,6 +31,14 @@ Parameters:
     Description: Priority of tenant.
     Type: Number
     Default: 1
+
+  SecretArn:
+    Description: Arn of secret.
+    Type: String
+
+  ExecutionRoleArn:
+    Description: Arn of role.
+    Type: String
 
 Resources:
   Service:
@@ -51,10 +59,11 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: storefront
+      ExecutionRoleArn: !Ref ExecutionRoleArn
       ContainerDefinitions:
         - Name: storefront
           Essential: true
-          Image: !Join [ "", [ "docker.io/akosfi/storefront:", !Ref TenantId ] ]
+          Image: !Join [ ":", [ "docker.io/akosfi/storefront", !Ref TenantId ] ]
           Memory: 256
           PortMappings:
             - ContainerPort: 8080
@@ -63,6 +72,11 @@ Resources:
             Options:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
+          Secrets:
+            - Name: NEXT_PUBLIC_SERVER_URL
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "NEXT_PUBLIC_SERVER_URL::" ] ]
+            - Name: NEXT_PUBLIC_TENANT_NAME
+              ValueFrom: !Join [ ":", [ !Ref SecretArn, "NEXT_PUBLIC_TENANT_NAME::" ] ]
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
